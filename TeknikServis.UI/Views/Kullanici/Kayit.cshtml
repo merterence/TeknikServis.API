@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Kayıt Ol";
+}
+
+<h2>Kayıt Ol</h2>
+
+<form id="kayitForm">
+    <div class="mb-3">
+        <label for="adSoyad" class="form-label">Ad Soyad</label>
+        <input type="text" class="form-control" id="adSoyad" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="sifre" class="form-label">Şifre</label>
+        <input type="password" class="form-control" id="sifre" required />
+    </div>
+
+    <button type="button" class="btn btn-success" onclick="kayitOl()">Kayıt Ol</button>
+</form>
+
+<script>
+    async function kayitOl() {
+        const adSoyad = document.getElementById("adSoyad").value;
+        const email = document.getElementById("email").value;
+        const sifre = document.getElementById("sifre").value;
+
+        const kullanici = {
+            adSoyad: adSoyad,
+            email: email,
+            sifre: sifre
+        };
+
+        try {
+            const response = await fetch("https://localhost:44365/api/Kullanici", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(kullanici)
+            });
+
+            if (response.ok) {
+                alert("Kayıt başarılı!");
+                document.getElementById("kayitForm").reset();
+            } else {
+                const hata = await response.text();
+                alert("Kayıt başarısız: " + hata);
+            }
+        } catch (error) {
+            alert("Bağlantı hatası: " + error);
+        }
+    }
+</script>

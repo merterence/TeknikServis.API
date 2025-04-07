@@ -8,7 +8,8 @@ namespace TeknikServis.API.Models
         {
         }
 
-        public DbSet<ServisTalebi> ServisTalepleri { get; set; } // Buraya ekledik
+        public DbSet<ServisTalebi> ServisTalepleri { get; set; } // Var olan tablo
+        public DbSet<Kullanici> Kullanicilar { get; set; }        // Yeni eklenen tablo ✅
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
