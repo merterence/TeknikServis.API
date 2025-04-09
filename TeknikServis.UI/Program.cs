@@ -1,7 +1,12 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using TeknikServis.UI.Filters;
+
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add<LoginFilter>();
+});
 
 // ✅ Session ve cache servisi eklendi
 builder.Services.AddDistributedMemoryCache();

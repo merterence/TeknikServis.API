@@ -45,8 +45,9 @@
             });
 
             if (response.ok) {
-                alert("Kayıt başarılı!");
-                document.getElementById("kayitForm").reset();
+                const sonuc = await response.json();
+                alert("Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz...");
+                window.location.href = sonuc.yonlendir;
             } else {
                 const hata = await response.text();
                 alert("Kayıt başarısız: " + hata);

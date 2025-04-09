@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Http;
 using TeknikServis.API.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TeknikServis.UI.Controllers
 {
+    [AllowAnonymous] // ⬅ Giriş kontrol filtresinden muaf
     public class KullaniciController : Controller
     {
         public IActionResult Kayit()
@@ -42,11 +44,11 @@ namespace TeknikServis.UI.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // ✅ Çıkış metodu eklendi
+        // ✅ Çıkış metodu
         public IActionResult Cikis()
         {
-            HttpContext.Session.Clear(); // Tüm oturum bilgilerini siler
-            return RedirectToAction("Index", "Home"); // Anasayfaya yönlendirir
+            HttpContext.Session.Clear(); // Tüm oturum bilgilerini temizle
+            return RedirectToAction("Index", "Home");
         }
     }
 }

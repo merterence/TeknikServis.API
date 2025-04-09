@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TeknikServis.UI.Models;
 using Newtonsoft.Json;
 using TeknikServis.UI.Models.dto;
+using Microsoft.AspNetCore.Http;
 
 namespace TeknikServis.UI.Controllers
 {
@@ -19,6 +20,14 @@ namespace TeknikServis.UI.Controllers
 
         public IActionResult YeniTalep()
         {
+            var ad = HttpContext.Session.GetString("adSoyad");
+            var email = HttpContext.Session.GetString("email");
+
+            if (string.IsNullOrEmpty(ad) || string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Kullanici");
+            }
+
             return View();
         }
 
@@ -57,6 +66,33 @@ namespace TeknikServis.UI.Controllers
                 TempData["SilmeHatasi"] = "Silme işlemi başarısız oldu!";
                 return RedirectToAction("Index", "Home");
             }
+        }
+
+        // ✅ Giriş yapan kullanıcının sadece kendi taleplerini gösteren action
+        public async Task<IActionResult> KendiTaleplerim()
+        {
+            var email = HttpContext.Session.GetString("email");
+
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Kullanici");
+            }
+
+            List<ServisTalebi> kullaniciTalepleri = new List<ServisTalebi>();
+
+            var response = await _httpClient.GetAsync("https://localhost:44365/api/ServisTalebi");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var tumTalepler = JsonConvert.DeserializeObject<List<ServisTalebi>>(json);
+
+                kullaniciTalepleri = tumTalepler
+                    .Where(t => t.Email == email)
+                    .ToList();
+            }
+
+            return View(kullaniciTalepleri);
         }
     }
 }

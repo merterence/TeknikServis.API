@@ -30,9 +30,12 @@
                             <a class="nav-link text-dark" asp-controller="Kullanici" asp-action="Kayit">Kayıt Ol</a>
                         </li>
 
-                        @* Oturum açılmışsa hoş geldin mesajı ve çıkış *@
+                        @* Oturum açılmışsa hoş geldin mesajı, çıkış ve taleplerim linki *@
                         @if (Context.Session.GetString("adSoyad") != null)
                         {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="ServisTalebi" asp-action="KendiTaleplerim">Taleplerim</a>
+                            </li>
                             <li class="nav-item">
                                 <span class="nav-link text-success">Hoş geldin, @Context.Session.GetString("adSoyad")</span>
                             </li>

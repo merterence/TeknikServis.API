@@ -32,7 +32,12 @@ namespace TeknikServis.API.Controllers
             _context.Kullanicilar.Add(kullanici);
             _context.SaveChanges();
 
-            return Ok("Kayıt başarılı.");
+            // ✅ JSON formatında cevap dönülüyor
+            return Ok(new
+            {
+                mesaj = "Kayıt başarılı.",
+                yonlendir = "/Kullanici/Login"
+            });
         }
 
         [HttpPost("giris")]
