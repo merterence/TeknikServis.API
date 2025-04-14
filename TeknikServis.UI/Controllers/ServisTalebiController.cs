@@ -34,13 +34,19 @@ namespace TeknikServis.UI.Controllers
         [HttpPost]
         public async Task<IActionResult> YeniTalep(ServisTalebiDto model)
         {
+            var ad = HttpContext.Session.GetString("adSoyad");
+            var email = HttpContext.Session.GetString("email");
+
+            model.KullaniciAdi = ad ?? "Bilinmiyor"; 
+            model.Email = email ?? "bilinmiyor@mail.com";
+
             if (!ModelState.IsValid)
                 return View(model);
 
             var jsonData = JsonConvert.SerializeObject(model);
             var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("https://localhost:5001/api/ServisTalebi", content);
+            var response = await _httpClient.PostAsync("https://localhost:44365/api/ServisTalebi", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -78,14 +84,14 @@ namespace TeknikServis.UI.Controllers
                 return RedirectToAction("Login", "Kullanici");
             }
 
-            List<ServisTalebi> kullaniciTalepleri = new List<ServisTalebi>();
+            List<ServisTalebiDto> kullaniciTalepleri = new List<ServisTalebiDto>();
 
             var response = await _httpClient.GetAsync("https://localhost:44365/api/ServisTalebi");
 
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
-                var tumTalepler = JsonConvert.DeserializeObject<List<ServisTalebi>>(json);
+                var tumTalepler = JsonConvert.DeserializeObject<List<ServisTalebiDto>>(json);
 
                 kullaniciTalepleri = tumTalepler
                     .Where(t => t.Email == email)
@@ -94,5 +100,6 @@ namespace TeknikServis.UI.Controllers
 
             return View(kullaniciTalepleri);
         }
+
     }
 }

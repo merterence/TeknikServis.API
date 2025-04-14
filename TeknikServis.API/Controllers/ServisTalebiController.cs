@@ -18,11 +18,26 @@ namespace TeknikServis.API.Controllers
             _context = context;
         }
 
+
         // 1️⃣ Tüm talepleri getir
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ServisTalebi>>> GetTalepler()
         {
             return await _context.ServisTalepleri.ToListAsync();
+        }
+
+        // ✅ Kullanıcının kendi taleplerini getir
+        [HttpGet("kullanici")]
+        public async Task<ActionResult<IEnumerable<ServisTalebi>>> GetByEmail(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+                return BadRequest("Email bilgisi gerekli.");
+
+            var talepler = await _context.ServisTalepleri
+                .Where(x => x.Email == email)
+                .ToListAsync();
+
+            return talepler;
         }
 
         // 2️⃣ Belirli bir talebi getir
@@ -38,10 +53,20 @@ namespace TeknikServis.API.Controllers
         [HttpPost]
         public async Task<ActionResult<ServisTalebi>> PostTalep(ServisTalebi talep)
         {
+            // ✅ DEBUG LOG: Talep bilgilerini yazdır
+            Console.WriteLine("=== [API] Yeni Servis Talebi Geldi ===");
+            Console.WriteLine($"Kullanıcı Adı : {talep.KullaniciAdi}");
+            Console.WriteLine($"Email         : {talep.Email}");
+            Console.WriteLine($"Ürün Adı      : {talep.UrunAdi}");
+            Console.WriteLine($"Açıklama      : {talep.Aciklama}");
+            Console.WriteLine($"Talep Tarihi  : {talep.TalepTarihi}");
+
             _context.ServisTalepleri.Add(talep);
             await _context.SaveChangesAsync();
+
             return CreatedAtAction(nameof(GetTalep), new { id = talep.Id }, talep);
         }
+
 
         // 4️⃣ Talebi güncelle
         [HttpPut("{id}")]

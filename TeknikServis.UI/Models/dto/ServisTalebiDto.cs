@@ -8,12 +8,15 @@
 
         public string? Aciklama { get; set; }
 
-        public string? AdSoyad { get; set; }
+        public string? KullaniciAdi { get; set; }
 
         public string? Email { get; set; }
 
         public string? Adres { get; set; }
 
         public string? TalepDurumu { get; set; } = "Oluşturuldu"; // Varsayılan değer
+
+        public DateTime? TalepTarihi { get; set; }
+
     }
 }

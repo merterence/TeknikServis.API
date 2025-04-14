@@ -1,8 +1,12 @@
-﻿@model TeknikServis.UI.Models.ServisTalebi
+﻿@model TeknikServis.UI.Models.dto.ServisTalebiDto
 
 @{
-    var adSoyad = Context.Session.GetString("adSoyad");
+    ViewData["Title"] = "Teknik Servis Talebi";
+    var kullaniciAdi = Context.Session.GetString("adSoyad");
     var email = Context.Session.GetString("email");
+
+    Model.KullaniciAdi = kullaniciAdi;
+    Model.Email = email;
 }
 
 <h2>Teknik Servis Talebi Oluştur</h2>
@@ -13,24 +17,30 @@
 }
 
 <form asp-action="YeniTalep" method="post">
+    <!-- GÖZÜKEN ama sadece gösterim amaçlı -->
     <div class="form-group">
-        <label>Ad Soyad</label>
-        <input type="text" class="form-control" name="AdSoyad" value="@adSoyad" readonly />
+        <label asp-for="KullaniciAdi"></label>
+        <input class="form-control" value="@Model.KullaniciAdi" readonly />
     </div>
 
     <div class="form-group">
-        <label>Email</label>
-        <input type="email" class="form-control" name="Email" value="@email" readonly />
+        <label asp-for="Email"></label>
+        <input class="form-control" value="@Model.Email" readonly />
+    </div>
+
+    <!-- GÖZÜKMEYEN ama form verisine dahil olan -->
+    <input type="hidden" asp-for="KullaniciAdi" />
+    <input type="hidden" asp-for="Email" />
+
+    <!-- Diğer alanlar -->
+    <div class="form-group">
+        <label asp-for="UrunAdi"></label>
+        <input asp-for="UrunAdi" class="form-control" required />
     </div>
 
     <div class="form-group">
-        <label for="UrunAdi">Ürün Adı</label>
-        <input type="text" class="form-control" id="UrunAdi" name="UrunAdi" required />
-    </div>
-
-    <div class="form-group">
-        <label for="Aciklama">Açıklama</label>
-        <textarea class="form-control" id="Aciklama" name="Aciklama" required></textarea>
+        <label asp-for="Aciklama"></label>
+        <textarea asp-for="Aciklama" class="form-control" required></textarea>
     </div>
 
     <button type="submit" class="btn btn-primary">Gönder</button>

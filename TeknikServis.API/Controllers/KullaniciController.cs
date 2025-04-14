@@ -35,6 +35,7 @@ namespace TeknikServis.API.Controllers
             // ✅ JSON formatında cevap dönülüyor
             return Ok(new
             {
+
                 mesaj = "Kayıt başarılı.",
                 yonlendir = "/Kullanici/Login"
             });
