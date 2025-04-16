@@ -24,6 +24,9 @@ namespace TeknikServis.Masaüstü
 
             // 📌 Form yüklendiğinde çalışacak olan metodu bağla
             this.Load += Form1_Load;
+
+            // 📌 CellDoubleClick eventini bağla
+            this.dataGridView1.CellDoubleClick += dataGridView1_CellDoubleClick;
         }
 
         private async void Form1_Load(object sender, EventArgs e)
@@ -37,7 +40,7 @@ namespace TeknikServis.Masaüstü
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonData = await response.Content.ReadAsStringAsync();
-                    var talepler = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ServisTalebiDto>>(jsonData);
+                    var talepler = JsonConvert.DeserializeObject<List<ServisTalebiDto>>(jsonData);
 
                     if (talepler.Count > 0)
                     {
@@ -49,7 +52,6 @@ namespace TeknikServis.Masaüstü
                         dataGridView1.Columns["Adres"].HeaderText = "Adres";
                         dataGridView1.Columns["TalepDurumu"].HeaderText = "Talep Durumu";
                         dataGridView1.Columns["TalepTarihi"].HeaderText = "Tarih";
-
                     }
                 }
                 else
@@ -62,6 +64,25 @@ namespace TeknikServis.Masaüstü
                 MessageBox.Show("Hata oluştu: " + ex.Message);
             }
         }
+
+        // ✅ Yeni eklenen: Çift tıklanınca detay formunu göster
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                var selectedRow = dataGridView1.Rows[e.RowIndex].DataBoundItem as ServisTalebiDto;
+
+                if (selectedRow != null)
+                {
+                    DetayForm detayForm = new DetayForm(selectedRow);
+                    detayForm.ShowDialog(); // Modal olarak aç
+                }
+            }
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Gerekirse bu kalsın, şimdilik boş
+        }
     }
 }
-
