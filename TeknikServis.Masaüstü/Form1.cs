@@ -11,12 +11,16 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using TeknikServis.Masaüstü.Models;
 
+
 namespace TeknikServis.Masaüstü
 {
     public partial class Form1 : Form
     {
         // ✅ AŞAMA 1: HttpClient nesnesini buraya ekledik
         private readonly HttpClient _httpClient = new HttpClient();
+
+        // ✅ AŞAMA 2: Önceki ID'leri tutmak için liste oluşturduk
+        private List<int> oncekiIdler = new List<int>();
 
         public Form1()
         {
@@ -44,6 +48,7 @@ namespace TeknikServis.Masaüstü
 
                     if (talepler.Count > 0)
                     {
+
                         dataGridView1.DataSource = talepler;
                         dataGridView1.Columns["UrunAdi"].HeaderText = "Ürün Adı";
                         dataGridView1.Columns["Aciklama"].HeaderText = "Açıklama";
@@ -52,6 +57,10 @@ namespace TeknikServis.Masaüstü
                         dataGridView1.Columns["Adres"].HeaderText = "Adres";
                         dataGridView1.Columns["TalepDurumu"].HeaderText = "Talep Durumu";
                         dataGridView1.Columns["TalepTarihi"].HeaderText = "Tarih";
+
+                        // ✅ Başlangıçta mevcut ID'leri listeye al
+                        oncekiIdler = talepler.Select(t => t.Id).ToList();
+
                     }
                 }
                 else
@@ -83,6 +92,37 @@ namespace TeknikServis.Masaüstü
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             // Gerekirse bu kalsın, şimdilik boş
+        }
+
+        // ✅ AŞAMA 3: Timer ile sürekli kontrol ve bildirim sesi
+        private async void timer1_Tick(object sender, EventArgs e)
+
+        {
+            try
+            {
+                string apiUrl = "https://localhost:44365/api/ServisTalebi";
+                HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonData = await response.Content.ReadAsStringAsync();
+                    var talepler = JsonConvert.DeserializeObject<List<ServisTalebiDto>>(jsonData);
+                    var yeniTalepler = talepler.Where(t => !oncekiIdler.Contains(t.Id)).ToList();
+                    if (yeniTalepler.Any())
+                    {
+                        // 🔊 Basit bildirim sesi
+                        System.Media.SystemSounds.Asterisk.Play();
+                        // Yeni verilerle tabloyu güncelle
+                        dataGridView1.DataSource = talepler;
+                        oncekiIdler = talepler.Select(t => t.Id).ToList();
+
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Hata oluştu: " + ex.Message);
+            }
         }
     }
 }
