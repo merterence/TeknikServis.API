@@ -61,5 +61,10 @@ namespace TeknikServis.Masaüstü
         private void txtUrunAdi_TextChanged(object sender, EventArgs e)
         {
         }
+
+        private void DetayForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

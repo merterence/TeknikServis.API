@@ -152,6 +152,7 @@
             this.Controls.Add(this.label1);
             this.Name = "DetayForm";
             this.Text = "DetayForm";
+            this.Load += new System.EventHandler(this.DetayForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
