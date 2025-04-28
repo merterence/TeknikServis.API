@@ -18,27 +18,35 @@ namespace TeknikServis.API.Controllers
             _context = context;
         }
 
-
         // 1️⃣ Tüm talepleri getir
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ServisTalebi>>> GetTalepler()
         {
-            return await _context.ServisTalepleri.ToListAsync();
+            return await _context.ServisTalepleri
+                .Include(t => t.Kullanici) // Kullanıcı bilgilerini de getiriyoruz
+                .ToListAsync();
         }
 
-        // ✅ Kullanıcının kendi taleplerini getir
+        // ✅ Kullanıcının kendi taleplerini getir 
+
         [HttpGet("kullanici")]
         public async Task<ActionResult<IEnumerable<ServisTalebi>>> GetByEmail(string email)
         {
             if (string.IsNullOrEmpty(email))
                 return BadRequest("Email bilgisi gerekli.");
 
+            var kullanici = await _context.Kullanicilar.FirstOrDefaultAsync(k => k.Email == email);
+            if (kullanici == null)
+                return NotFound("Kullanıcı bulunamadı.");
+
             var talepler = await _context.ServisTalepleri
-                .Where(x => x.Email == email)
+                .Where(t => t.KullaniciId == kullanici.Id)
+                .Include(t => t.Kullanici)
                 .ToListAsync();
 
             return talepler;
         }
+
 
         // 2️⃣ Belirli bir talebi getir
         [HttpGet("{id}")]
@@ -53,10 +61,9 @@ namespace TeknikServis.API.Controllers
         [HttpPost]
         public async Task<ActionResult<ServisTalebi>> PostTalep(ServisTalebi talep)
         {
-            // ✅ DEBUG LOG: Talep bilgilerini yazdır
+            // ✅ DEBUG LOG: Talep bilgilerini yazdır (Email ve KullaniciAdi kaldırıldı)
             Console.WriteLine("=== [API] Yeni Servis Talebi Geldi ===");
-            Console.WriteLine($"Kullanıcı Adı : {talep.KullaniciAdi}");
-            Console.WriteLine($"Email         : {talep.Email}");
+            Console.WriteLine($"Kullanıcı ID : {talep.KullaniciId}");
             Console.WriteLine($"Ürün Adı      : {talep.UrunAdi}");
             Console.WriteLine($"Açıklama      : {talep.Aciklama}");
             Console.WriteLine($"Talep Tarihi  : {talep.TalepTarihi}");
@@ -66,7 +73,6 @@ namespace TeknikServis.API.Controllers
 
             return CreatedAtAction(nameof(GetTalep), new { id = talep.Id }, talep);
         }
-
 
         // 4️⃣ Talebi güncelle
         [HttpPut("{id}")]

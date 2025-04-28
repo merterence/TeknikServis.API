@@ -38,6 +38,7 @@
             this.btnKapat = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.txtDurum = new System.Windows.Forms.TextBox();
+            this.btnKaydet = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -110,9 +111,9 @@
             // 
             // btnKapat
             // 
-            this.btnKapat.Location = new System.Drawing.Point(713, 12);
+            this.btnKapat.Location = new System.Drawing.Point(688, 12);
             this.btnKapat.Name = "btnKapat";
-            this.btnKapat.Size = new System.Drawing.Size(75, 23);
+            this.btnKapat.Size = new System.Drawing.Size(100, 23);
             this.btnKapat.TabIndex = 8;
             this.btnKapat.Text = "Kapat";
             this.btnKapat.UseVisualStyleBackColor = true;
@@ -135,11 +136,22 @@
             this.txtDurum.Size = new System.Drawing.Size(132, 22);
             this.txtDurum.TabIndex = 10;
             // 
+            // btnKaydet
+            // 
+            this.btnKaydet.Location = new System.Drawing.Point(688, 406);
+            this.btnKaydet.Name = "btnKaydet";
+            this.btnKaydet.Size = new System.Drawing.Size(100, 23);
+            this.btnKaydet.TabIndex = 11;
+            this.btnKaydet.Text = "Kaydet";
+            this.btnKaydet.UseVisualStyleBackColor = true;
+            this.btnKaydet.Click += new System.EventHandler(this.btnKaydet_Click);
+            // 
             // DetayForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnKaydet);
             this.Controls.Add(this.txtDurum);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.btnKapat);
@@ -170,5 +182,6 @@
         private System.Windows.Forms.Button btnKapat;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txtDurum;
+        private System.Windows.Forms.Button btnKaydet;
     }
 }

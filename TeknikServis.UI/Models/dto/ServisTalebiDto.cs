@@ -8,7 +8,7 @@
 
         public string? Aciklama { get; set; }
 
-        public string? KullaniciAdi { get; set; }
+        public int KullaniciId { get; set; }
 
         public string? Email { get; set; }
 

@@ -9,7 +9,7 @@ namespace TeknikServis.API.Models
         public int Id { get; set; }
 
         [Required]
-        public string KullaniciAdi { get; set; }
+        public int KullaniciId { get; set; }
 
         [Required]
         public string UrunAdi { get; set; }
@@ -17,15 +17,13 @@ namespace TeknikServis.API.Models
         [Required]
         public string Aciklama { get; set; }
 
-        
-        public string? Email { get; set; }
-
-        public string? Adres { get; set; } // Opsiyonel olarak bırakıyoruz
 
         public string TalepDurumu { get; set; } = "Oluşturuldu";
 
         public DateTime TalepTarihi { get; set; } = DateTime.Now;
 
         public bool Durum { get; set; } = false; // false = Bekliyor, true = Çözüldü
+
+        public virtual Kullanici Kullanici { get; set; }
     }
 }

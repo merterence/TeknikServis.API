@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -23,7 +25,7 @@ namespace TeknikServis.Masaüstü
             _talep = talep;
 
             // Verileri formdaki bileşenlere yerleştir
-            txtAdSoyad.Text = _talep.KullaniciAdi;
+            txtAdSoyad.Text = _talep.Kullanici.AdSoyad;
             txtUrunAdi.Text = _talep.UrunAdi;
             txtAciklama.Text = _talep.Aciklama;
             txtDurum.Text = _talep.TalepDurumu;
@@ -66,5 +68,43 @@ namespace TeknikServis.Masaüstü
         {
 
         }
+
+        private async void btnKaydet_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // 1️⃣ Kullanıcı açıklamayı ya da durumu değiştirmiş olabilir
+                _talep.Aciklama = txtAciklama.Text;
+                _talep.TalepDurumu = txtDurum.Text;
+
+                // 2️⃣ DTO'yu JSON formatına çeviriyoruz
+                var jsonData = JsonConvert.SerializeObject(_talep);
+                var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+                // 3️⃣ API'ye PUT isteği atıyoruz
+                string apiUrl = $"https://localhost:44365/api/ServisTalebi/{_talep.Id}";
+                using (var httpClient = new HttpClient())
+                {
+                    var response = await httpClient.PutAsync(apiUrl, content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        MessageBox.Show("Talep başarıyla güncellendi!");
+                        this.DialogResult = DialogResult.OK;
+                        this.Close(); // Formu kapat
+                    }
+                    else
+                    {
+                        MessageBox.Show("Güncelleme başarısız: " + response.StatusCode);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Hata oluştu: " + ex.Message);
+            }
+        }
+
     }
 }
+

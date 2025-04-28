@@ -34,12 +34,6 @@ namespace TeknikServis.UI.Controllers
         [HttpPost]
         public async Task<IActionResult> YeniTalep(ServisTalebiDto model)
         {
-            var ad = HttpContext.Session.GetString("adSoyad");
-            var email = HttpContext.Session.GetString("email");
-
-            model.KullaniciAdi = ad ?? "Bilinmiyor"; 
-            model.Email = email ?? "bilinmiyor@mail.com";
-
             if (!ModelState.IsValid)
                 return View(model);
 
@@ -74,15 +68,17 @@ namespace TeknikServis.UI.Controllers
             }
         }
 
-        // ✅ Giriş yapan kullanıcının sadece kendi taleplerini gösteren action
+        // ✅ Kullanıcının sadece kendi taleplerini gösteren kısım
         public async Task<IActionResult> KendiTaleplerim()
         {
-            var email = HttpContext.Session.GetString("email");
+            var kullaniciIdString = HttpContext.Session.GetString("kullaniciId");
 
-            if (string.IsNullOrEmpty(email))
+            if (string.IsNullOrEmpty(kullaniciIdString))
             {
                 return RedirectToAction("Login", "Kullanici");
             }
+
+            int kullaniciId = int.Parse(kullaniciIdString);
 
             List<ServisTalebiDto> kullaniciTalepleri = new List<ServisTalebiDto>();
 
@@ -94,12 +90,11 @@ namespace TeknikServis.UI.Controllers
                 var tumTalepler = JsonConvert.DeserializeObject<List<ServisTalebiDto>>(json);
 
                 kullaniciTalepleri = tumTalepler
-                    .Where(t => t.Email == email)
+                    .Where(t => t.KullaniciId == kullaniciId)
                     .ToList();
             }
 
             return View(kullaniciTalepleri);
         }
-
     }
 }

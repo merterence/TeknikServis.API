@@ -22,3 +22,11 @@
 {
     <div class="alert alert-danger mt-3">@ViewBag.Mesaj</div>
 }
+
+<!-- ✅ Login başarılı olduktan sonra kullanıcı ID'sini LocalStorage'a kaydediyoruz -->
+@if (TempData["kullaniciId"] != null)
+{
+    <script>
+        localStorage.setItem("kullaniciId", "@TempData["kullaniciId"]");
+    </script>
+}

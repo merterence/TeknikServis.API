@@ -7,5 +7,8 @@
         public string? Email { get; set; }
         public string? Sifre { get; set; }
         public string? Rol { get; set; } = "Kullanici";
+
+        public virtual ICollection<ServisTalebi> ServisTalepleri { get; set; } 
+
     }
 }

@@ -37,9 +37,14 @@ namespace TeknikServis.UI.Controllers
                 return View();
             }
 
-            // Session’a kullanıcıyı ekle
+            // Session’a kullanıcı bilgilerini kaydet
             HttpContext.Session.SetString("adSoyad", kullanici.AdSoyad ?? "");
             HttpContext.Session.SetString("email", kullanici.Email ?? "");
+            HttpContext.Session.SetInt32("kullaniciId", kullanici.Id); // ➡️ Kullanıcı ID bilgisini de Session'a kaydediyoruz
+
+            // ✅ 4. Başarılı giriş olursa LocalStorage'a ID aktaracağız (Login.cshtml dosyasında)
+            TempData["kullaniciId"] = kullanici.Id;
+
 
             return RedirectToAction("Index", "Home");
         }
