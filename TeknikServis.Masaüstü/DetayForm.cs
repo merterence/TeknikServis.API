@@ -73,15 +73,24 @@ namespace TeknikServis.Masaüstü
         {
             try
             {
-                // 1️⃣ Kullanıcı açıklamayı ya da durumu değiştirmiş olabilir
+                // 1️⃣ Güncellenen alanları DTO’ya yaz
                 _talep.Aciklama = txtAciklama.Text;
                 _talep.TalepDurumu = txtDurum.Text;
 
-                // 2️⃣ DTO'yu JSON formatına çeviriyoruz
+                // Eğer ürün adı da düzenlenebilir olacaksa ekleyebilirsin:
+                _talep.UrunAdi = txtUrunAdi.Text;
+
+                // 2️⃣ DTO'da null olan kritik alanları kontrol et
+                if (_talep.KullaniciId == 0)
+                {
+                    MessageBox.Show("Kullanıcı ID boş olamaz.");
+                    return;
+                }
+
+                // 3️⃣ DTO’yu JSON’a çevir ve PUT isteği yap
                 var jsonData = JsonConvert.SerializeObject(_talep);
                 var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
-                // 3️⃣ API'ye PUT isteği atıyoruz
                 string apiUrl = $"https://localhost:44365/api/ServisTalebi/{_talep.Id}";
                 using (var httpClient = new HttpClient())
                 {
@@ -91,7 +100,7 @@ namespace TeknikServis.Masaüstü
                     {
                         MessageBox.Show("Talep başarıyla güncellendi!");
                         this.DialogResult = DialogResult.OK;
-                        this.Close(); // Formu kapat
+                        this.Close();
                     }
                     else
                     {
@@ -104,6 +113,7 @@ namespace TeknikServis.Masaüstü
                 MessageBox.Show("Hata oluştu: " + ex.Message);
             }
         }
+
 
     }
 }

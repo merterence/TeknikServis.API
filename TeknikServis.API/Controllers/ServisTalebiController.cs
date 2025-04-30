@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TeknikServis.API.Models;
+using TeknikServis.API.Models.Dto;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -59,14 +60,22 @@ namespace TeknikServis.API.Controllers
 
         // 3️⃣ Yeni servis talebi oluştur
         [HttpPost]
-        public async Task<ActionResult<ServisTalebi>> PostTalep(ServisTalebi talep)
+        public async Task<ActionResult<ServisTalebi>> PostTalep([FromBody] ServisTalebiDto dto)
         {
-            // ✅ DEBUG LOG: Talep bilgilerini yazdır (Email ve KullaniciAdi kaldırıldı)
+            var talep = new ServisTalebi
+            {
+                KullaniciId = dto.KullaniciId,
+                UrunAdi = dto.UrunAdi,
+                Aciklama = dto.Aciklama,
+                TalepDurumu = dto.TalepDurumu ?? "Oluşturuldu",
+                TalepTarihi = dto.TalepTarihi ?? DateTime.Now
+            };
+
             Console.WriteLine("=== [API] Yeni Servis Talebi Geldi ===");
             Console.WriteLine($"Kullanıcı ID : {talep.KullaniciId}");
-            Console.WriteLine($"Ürün Adı      : {talep.UrunAdi}");
-            Console.WriteLine($"Açıklama      : {talep.Aciklama}");
-            Console.WriteLine($"Talep Tarihi  : {talep.TalepTarihi}");
+            Console.WriteLine($"Ürün Adı     : {talep.UrunAdi}");
+            Console.WriteLine($"Açıklama     : {talep.Aciklama}");
+            Console.WriteLine($"Talep Tarihi : {talep.TalepTarihi}");
 
             _context.ServisTalepleri.Add(talep);
             await _context.SaveChangesAsync();
@@ -76,13 +85,27 @@ namespace TeknikServis.API.Controllers
 
         // 4️⃣ Talebi güncelle
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTalep(int id, ServisTalebi talep)
+        public async Task<IActionResult> PutTalep(int id, [FromBody] ServisTalebiDto dto)
         {
-            if (id != talep.Id) return BadRequest();
-            _context.Entry(talep).State = EntityState.Modified;
+            if (id <= 0 || dto == null || id != dto.Id)
+                return BadRequest("Geçersiz istek.");
+
+            var talep = await _context.ServisTalepleri.FindAsync(id);
+
+            if (talep == null)
+                return NotFound("Talep bulunamadı.");
+
+            // Sadece güncellenebilir alanları değiştir
+            talep.Aciklama = dto.Aciklama;
+            talep.TalepDurumu = dto.TalepDurumu;
+            talep.UrunAdi = dto.UrunAdi;
+
+            // Navigation property güncellenmiyor!
+
             await _context.SaveChangesAsync();
             return NoContent();
         }
+
 
         // 5️⃣ Talebi sil
         [HttpDelete("{id}")]

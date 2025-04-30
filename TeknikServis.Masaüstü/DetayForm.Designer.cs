@@ -93,7 +93,6 @@
             // 
             this.txtUrunAdi.Location = new System.Drawing.Point(240, 180);
             this.txtUrunAdi.Name = "txtUrunAdi";
-            this.txtUrunAdi.ReadOnly = true;
             this.txtUrunAdi.Size = new System.Drawing.Size(132, 22);
             this.txtUrunAdi.TabIndex = 6;
             this.txtUrunAdi.TextChanged += new System.EventHandler(this.txtUrunAdi_TextChanged);
@@ -103,7 +102,6 @@
             this.txtAciklama.Location = new System.Drawing.Point(240, 246);
             this.txtAciklama.Multiline = true;
             this.txtAciklama.Name = "txtAciklama";
-            this.txtAciklama.ReadOnly = true;
             this.txtAciklama.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtAciklama.Size = new System.Drawing.Size(132, 100);
             this.txtAciklama.TabIndex = 7;
@@ -132,7 +130,6 @@
             // 
             this.txtDurum.Location = new System.Drawing.Point(240, 383);
             this.txtDurum.Name = "txtDurum";
-            this.txtDurum.ReadOnly = true;
             this.txtDurum.Size = new System.Drawing.Size(132, 22);
             this.txtDurum.TabIndex = 10;
             // 
