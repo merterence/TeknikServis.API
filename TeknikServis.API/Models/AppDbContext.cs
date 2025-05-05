@@ -13,6 +13,12 @@ namespace TeknikServis.API.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ServisTalebi>()
+            .HasOne(t => t.Kullanici)
+            .WithMany(k => k.ServisTalepleri)
+            .HasForeignKey(t => t.KullaniciId)
+            .OnDelete(DeleteBehavior.Restrict);
+
             base.OnModelCreating(modelBuilder);
         }
     }

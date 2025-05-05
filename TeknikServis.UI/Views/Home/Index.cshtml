@@ -11,33 +11,8 @@
 
     <h2>Teknik Servis Talebi</h2>
 
-    <button class="btn btn-primary" onclick="showForm()">Servis Talebi Oluştur</button>
-
-    <div id="talepForm" style="display: none; margin-top: 20px;">
-        <form id="servisTalepForm">
-            <div class="mb-3">
-                <label for="urunAdi" class="form-label">Ürün Adı</label>
-                <input type="text" class="form-control" id="urunAdi" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="aciklama" class="form-label">Açıklama</label>
-                <textarea class="form-control" id="aciklama" required></textarea>
-            </div>
-
-            <div class="mb-3">
-                <label for="kullaniciAdi" class="form-label">Adınız</label>
-                <input type="text" class="form-control" id="kullaniciAdi" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="resim" class="form-label">Fotoğraf Yükleyin</label>
-                <input type="file" class="form-control" id="resim">
-            </div>
-
-            <button type="button" class="btn btn-success" onclick="gonder()">Gönder</button>
-        </form>
-    </div>
+    <!-- ✅ Talep oluşturma linki (form yok artık) -->
+    <a class="btn btn-primary" asp-controller="ServisTalebi" asp-action="YeniTalep">Servis Talebi Oluştur</a>
 
     <hr class="mt-5" />
     <h3>Gönderilen Servis Talepleri</h3>
@@ -73,44 +48,5 @@
         </tbody>
     </table>
 
-    <script>
-        function showForm() {
-            document.getElementById("talepForm").style.display = "block";
-        }
-
-        async function gonder() {
-            const urunAdi = document.getElementById("urunAdi").value;
-            const aciklama = document.getElementById("aciklama").value;
-            const kullaniciAdi = document.getElementById("kullaniciAdi").value;
-
-            const veri = {
-                urunAdi: urunAdi,
-                aciklama: aciklama,
-                kullaniciAdi: kullaniciAdi
-            };
-
-            try {
-                const response = await fetch("https://localhost:44365/api/ServisTalebi", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(veri)
-                });
-
-                if (response.ok) {
-                    alert("Servis talebiniz başarıyla alındı!");
-                    document.getElementById("servisTalepForm").reset();
-                    location.reload(); // Yeni kayıt sonrası sayfayı yenile
-                } else {
-                    alert("Bir hata oluştu!");
-                }
-            } catch (error) {
-                alert("Bağlantı hatası: " + error);
-            }
-        }
-    </script>
-
 </body>
 </html>
- 

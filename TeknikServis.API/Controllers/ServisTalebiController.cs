@@ -62,9 +62,17 @@ namespace TeknikServis.API.Controllers
         [HttpPost]
         public async Task<ActionResult<ServisTalebi>> PostTalep([FromBody] ServisTalebiDto dto)
         {
+            // ❗️KullaniciId'yi dışarıdan değil, oturumdan al
+            var kullaniciIdHeader = HttpContext.Request.Headers["kullaniciId"].FirstOrDefault();
+
+            if (!int.TryParse(kullaniciIdHeader, out int kullaniciId))
+            {
+                return BadRequest("Geçerli bir kullanıcı oturumu bulunamadı.");
+            }
+
             var talep = new ServisTalebi
             {
-                KullaniciId = dto.KullaniciId,
+                KullaniciId = kullaniciId,
                 UrunAdi = dto.UrunAdi,
                 Aciklama = dto.Aciklama,
                 TalepDurumu = dto.TalepDurumu ?? "Oluşturuldu",
@@ -82,6 +90,7 @@ namespace TeknikServis.API.Controllers
 
             return CreatedAtAction(nameof(GetTalep), new { id = talep.Id }, talep);
         }
+
 
         // 4️⃣ Talebi güncelle
         [HttpPut("{id}")]

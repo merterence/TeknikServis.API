@@ -1,0 +1,62 @@
+﻿@{
+    ViewData["Title"] = "Teknik Servis Talebi";
+    var kullaniciId = Context.Session.GetInt32("kullaniciId") ?? 0;
+}
+
+<h2>Teknik Servis Talebi Oluştur</h2>
+
+<form id="talepForm">
+    <div class="form-group">
+        <label for="urunAdi">Ürün Adı</label>
+        <input type="text" class="form-control" id="urunAdi" name="urunAdi" required />
+    </div>
+
+    <div class="form-group">
+        <label for="aciklama">Açıklama</label>
+        <textarea class="form-control" id="aciklama" name="aciklama" required></textarea>
+    </div>
+
+    <input type="hidden" id="kullaniciIdInput" value="@kullaniciId" />
+
+    <button type="button" onclick="talepGonder()" class="btn btn-primary">Gönder</button>
+</form>
+
+<script>
+    function talepGonder() {
+        const kullaniciId = parseInt(document.getElementById("kullaniciIdInput").value);
+
+        if (!kullaniciId || isNaN(kullaniciId)) {
+            alert("Kullanıcı bilgisi alınamadı.");
+            return;
+        }
+
+        const talep = {
+            urunAdi: document.getElementById("urunAdi").value,
+            aciklama: document.getElementById("aciklama").value,
+            kullaniciId: kullaniciId,
+            talepDurumu: "Oluşturuldu",
+            talepTarihi: new Date().toISOString()
+        };
+
+        fetch("https://localhost:44365/api/ServisTalebi", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "kullaniciId": kullaniciId  // Session'dan gelen ID'yi header'a ekliyoruz
+            },
+            body: JSON.stringify(talep)
+        })
+        .then(response => {
+            if (response.ok) {
+                alert("Talep başarıyla gönderildi!");
+                location.reload();
+            } else {
+                response.text().then(text => alert("Sunucu hatası: " + text));
+            }
+        })
+        .catch(error => {
+            console.error("Fetch hatası:", error);
+            alert("Beklenmedik bir hata oluştu.");
+        });
+    }
+</script>
