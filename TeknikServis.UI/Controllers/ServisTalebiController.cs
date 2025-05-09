@@ -71,14 +71,12 @@ namespace TeknikServis.UI.Controllers
         // ✅ Kullanıcının sadece kendi taleplerini gösteren kısım
         public async Task<IActionResult> KendiTaleplerim()
         {
-            var kullaniciIdString = HttpContext.Session.GetString("kullaniciId");
+            var kullaniciId = HttpContext.Session.GetInt32("kullaniciId");
 
-            if (string.IsNullOrEmpty(kullaniciIdString))
+            if (kullaniciId == null)
             {
                 return RedirectToAction("Login", "Kullanici");
             }
-
-            int kullaniciId = int.Parse(kullaniciIdString);
 
             List<ServisTalebiDto> kullaniciTalepleri = new List<ServisTalebiDto>();
 
@@ -90,7 +88,7 @@ namespace TeknikServis.UI.Controllers
                 var tumTalepler = JsonConvert.DeserializeObject<List<ServisTalebiDto>>(json);
 
                 kullaniciTalepleri = tumTalepler
-                    .Where(t => t.KullaniciId == kullaniciId)
+                     .Where(t => t.KullaniciId == kullaniciId.Value)
                     .ToList();
             }
 

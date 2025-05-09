@@ -4,10 +4,10 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Net.Http;
 using Newtonsoft.Json;
 using TeknikServis.Masaüstü.Models;
 
@@ -17,6 +17,7 @@ namespace TeknikServis.Masaüstü
     {
         private readonly HttpClient _httpClient = new HttpClient();
         private List<int> oncekiIdler = new List<int>();
+        private List<ServisTalebiDto> tumTalepler = new List<ServisTalebiDto>();
 
         public Form1()
         {
@@ -35,14 +36,14 @@ namespace TeknikServis.Masaüstü
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonData = await response.Content.ReadAsStringAsync();
-                    var talepler = JsonConvert.DeserializeObject<List<ServisTalebiDto>>(jsonData);
+                    tumTalepler = JsonConvert.DeserializeObject<List<ServisTalebiDto>>(jsonData);
 
                     dataGridView1.AutoGenerateColumns = false;
                     dataGridView1.Columns.Clear();
 
                     var kullaniciAdSoyadColumn = new DataGridViewTextBoxColumn();
                     kullaniciAdSoyadColumn.HeaderText = "Ad Soyad";
-                    kullaniciAdSoyadColumn.DataPropertyName = "Kullanici.AdSoyad";
+                    kullaniciAdSoyadColumn.DataPropertyName = "AdSoyad";
                     dataGridView1.Columns.Add(kullaniciAdSoyadColumn);
 
                     var urunAdiColumn = new DataGridViewTextBoxColumn();
@@ -65,20 +66,19 @@ namespace TeknikServis.Masaüstü
                     talepTarihiColumn.DataPropertyName = "TalepTarihi";
                     dataGridView1.Columns.Add(talepTarihiColumn);
 
-                    dataGridView1.DataSource = talepler;
+                    dataGridView1.DataSource = tumTalepler.Select(t => new
+                    {
+                        AdSoyad = t.Kullanici?.AdSoyad ?? "Bilinmiyor",
+                        UrunAdi = t.UrunAdi,
+                        Aciklama = t.Aciklama,
+                        TalepDurumu = t.TalepDurumu,
+                        TalepTarihi = t.TalepTarihi
+                    }).ToList();
 
-                    // ✅ Null güvenliği ile mevcut ID'leri kaydet
-                    if (talepler != null && talepler.Any())
-                    {
-                        oncekiIdler = talepler
-                            .Where(t => t != null)
-                            .Select(t => t.Id)
-                            .ToList();
-                    }
-                    else
-                    {
-                        oncekiIdler = new List<int>();
-                    }
+                    oncekiIdler = tumTalepler
+                        .Where(t => t != null)
+                        .Select(t => t.Id)
+                        .ToList();
                 }
                 else
                 {
@@ -98,13 +98,16 @@ namespace TeknikServis.Masaüstü
 
         private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
+            if (e.RowIndex >= 0 && tumTalepler.Count > 0)
             {
-                var selectedRow = dataGridView1.Rows[e.RowIndex].DataBoundItem as ServisTalebiDto;
+                var adSoyad = dataGridView1.Rows[e.RowIndex].Cells["AdSoyad"].Value?.ToString();
 
-                if (selectedRow != null)
+                var selectedTalep = tumTalepler
+                    .FirstOrDefault(t => t.Kullanici?.AdSoyad == adSoyad);
+
+                if (selectedTalep != null)
                 {
-                    DetayForm detayForm = new DetayForm(selectedRow);
+                    DetayForm detayForm = new DetayForm(selectedTalep);
                     var result = detayForm.ShowDialog();
 
                     if (result == DialogResult.OK)
@@ -117,7 +120,7 @@ namespace TeknikServis.Masaüstü
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            // İsteğe bağlı
+            // Opsiyonel
         }
 
         private async void timer1_Tick(object sender, EventArgs e)
@@ -133,27 +136,26 @@ namespace TeknikServis.Masaüstü
                     var talepler = JsonConvert.DeserializeObject<List<ServisTalebiDto>>(jsonData);
 
                     var yeniTalepler = talepler
-                    .Where(t => t != null && !oncekiIdler.Contains(t.Id))
-                    .ToList();
-
+                        .Where(t => t != null && !oncekiIdler.Contains(t.Id))
+                        .ToList();
 
                     if (yeniTalepler.Any())
                     {
                         System.Media.SystemSounds.Asterisk.Play();
-                        dataGridView1.DataSource = talepler;
 
-                        // ✅ Null güvenliği ile ID'leri güncelle
-                        if (talepler != null && talepler.Any())
+                        dataGridView1.DataSource = talepler.Select(t => new
                         {
-                            oncekiIdler = talepler
-                                .Where(t => t != null)
-                                .Select(t => t.Id)
-                                .ToList();
-                        }
-                        else
-                        {
-                            oncekiIdler = new List<int>();
-                        }
+                            AdSoyad = t.Kullanici?.AdSoyad ?? "Bilinmiyor",
+                            UrunAdi = t.UrunAdi,
+                            Aciklama = t.Aciklama,
+                            TalepDurumu = t.TalepDurumu,
+                            TalepTarihi = t.TalepTarihi
+                        }).ToList();
+
+                        oncekiIdler = talepler
+                            .Where(t => t != null)
+                            .Select(t => t.Id)
+                            .ToList();
                     }
                 }
             }
