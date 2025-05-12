@@ -20,5 +20,8 @@ namespace TeknikServis.Masaüstü.Models
         public string? AdSoyad { get; set; }
         public string? Email { get; set; }
         public string? Rol { get; set; }
+        public bool IsAdmin { get; set; }
+
+
     }
 }

@@ -20,7 +20,7 @@ namespace TeknikServis.UI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(string email, string sifre)
+        public IActionResult Login(string email, string sifre, bool beniHatirla)
         {
             // DbContext bağlantısı
             var context = new AppDbContext(
@@ -45,6 +45,24 @@ namespace TeknikServis.UI.Controllers
             // ✅ 4. Başarılı giriş olursa LocalStorage'a ID aktaracağız (Login.cshtml dosyasında)
             TempData["kullaniciId"] = kullanici.Id;
 
+            // ✅ Eğer beni hatırla seçiliyse cookie ekle
+            if (beniHatirla)
+            {
+                Response.Cookies.Append("email", email, new CookieOptions
+                {
+                    Expires = DateTimeOffset.Now.AddDays(7)
+                });
+
+                Response.Cookies.Append("sifre", sifre, new CookieOptions
+                {
+                    Expires = DateTimeOffset.Now.AddDays(7)
+                });
+            }
+            else
+            {
+                Response.Cookies.Delete("email");
+                Response.Cookies.Delete("sifre");
+            }
 
             return RedirectToAction("Index", "Home");
         }

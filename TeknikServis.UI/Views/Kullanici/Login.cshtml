@@ -15,6 +15,11 @@
         <input type="password" class="form-control" name="sifre" required />
     </div>
 
+    <div class="form-check mb-3">
+        <input type="checkbox" class="form-check-input" id="beniHatirla" name="beniHatirla">
+        <label class="form-check-label" for="beniHatirla">Beni hatırla</label>
+    </div>
+
     <button type="submit" class="btn btn-primary">Giriş Yap</button>
 </form>
 
@@ -22,6 +27,26 @@
 {
     <div class="alert alert-danger mt-3">@ViewBag.Mesaj</div>
 }
+
+<!-- 🍪 Sayfa yüklendiğinde cookie varsa inputları otomatik doldur -->
+<script>
+    window.onload = function () {
+        var email = getCookie("email");
+        var sifre = getCookie("sifre");
+
+        if (email && sifre) {
+            document.getElementById("email").value = email;
+            document.getElementById("sifre").value = sifre;
+            document.getElementById("beniHatirla").checked = true;
+        }
+    }
+
+    function getCookie(name) {
+        var match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+        if (match) return decodeURIComponent(match[2]);
+        return null;
+    }
+</script>
 
 <!-- ✅ Login başarılı olduktan sonra kullanıcı ID'sini LocalStorage'a kaydediyoruz -->
 @if (TempData["kullaniciId"] != null)

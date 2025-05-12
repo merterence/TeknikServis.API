@@ -13,37 +13,49 @@ using TeknikServis.Masaüstü.Models;
 
 namespace TeknikServis.Masaüstü
 {
+
     public partial class Form1 : Form
     {
         private readonly HttpClient _httpClient = new HttpClient();
         private List<int> oncekiIdler = new List<int>();
         private List<ServisTalebiDto> tumTalepler = new List<ServisTalebiDto>();
+        private readonly KullaniciDto _aktifKullanici;
 
-        public Form1()
+        public Form1(KullaniciDto kullanici)
         {
             InitializeComponent();
+            _aktifKullanici = kullanici;
+
             this.Load += Form1_Load;
             this.dataGridView1.CellDoubleClick += dataGridView1_CellDoubleClick;
+
+            // Giriş yapan kullanıcıyı mesaj olarak gösterebilirsin (opsiyonel)
+            this.Text = $"Hoş geldin, {_aktifKullanici.AdSoyad}";
         }
+
 
         private async void YukleVerileri()
         {
             try
             {
-                string apiUrl = "https://localhost:44365/api/ServisTalebi";
+                string apiUrl = _aktifKullanici.IsAdmin
+            ? "https://localhost:44365/api/ServisTalebi"
+            : $"https://localhost:44365/api/ServisTalebi/kullanici?id={_aktifKullanici.Id}";
+
                 HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
 
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonData = await response.Content.ReadAsStringAsync();
-                    tumTalepler = JsonConvert.DeserializeObject<List<ServisTalebiDto>>(jsonData);
+                    var talepler = JsonConvert.DeserializeObject<List<ServisTalebiDto>>(jsonData);
 
                     dataGridView1.AutoGenerateColumns = false;
                     dataGridView1.Columns.Clear();
 
                     var kullaniciAdSoyadColumn = new DataGridViewTextBoxColumn();
                     kullaniciAdSoyadColumn.HeaderText = "Ad Soyad";
-                    kullaniciAdSoyadColumn.DataPropertyName = "AdSoyad";
+                    kullaniciAdSoyadColumn.DataPropertyName = "Kullanici.AdSoyad";
+                    kullaniciAdSoyadColumn.Name = "AdSoyad";
                     dataGridView1.Columns.Add(kullaniciAdSoyadColumn);
 
                     var urunAdiColumn = new DataGridViewTextBoxColumn();

@@ -48,6 +48,18 @@ namespace TeknikServis.API.Controllers
             return talepler;
         }
 
+        // 🆕 KullaniciId ile filtreleme
+        [HttpGet("kullanici-id")]
+        public async Task<ActionResult<IEnumerable<ServisTalebi>>> GetByKullaniciId(int id)
+        {
+            var talepler = await _context.ServisTalepleri
+                .Where(t => t.KullaniciId == id)
+                .Include(t => t.Kullanici)
+                .ToListAsync();
+
+            return talepler;
+        }
+
 
         // 2️⃣ Belirli bir talebi getir
         [HttpGet("{id}")]
