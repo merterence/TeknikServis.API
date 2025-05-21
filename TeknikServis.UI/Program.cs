@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews(options =>
 {
-    options.Filters.Add<LoginFilter>();
+    //options.Filters.Add<LoginFilter>();
 });
 
 // ✅ Session ve cache servisi eklendi
@@ -32,9 +32,17 @@ app.UseRouting();
 // ✅ Session aktif edildi
 app.UseSession();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
+
+app.MapControllers();
+
+//app.MapControllerRoute(
+//    name: "api",
+//    pattern: "api/{controller}/{action}/{id?}");
+    
 
 app.MapControllerRoute(
     name: "default",

@@ -2,9 +2,9 @@
     ViewData["Title"] = "Giriş Yap";
 }
 
-<h2>Giriş Yap</h2>
+<h2>Giriş Yap </h2>
 
-<form asp-action="Login" method="post">
+<form asp-area="" asp-controller="Kullanici" asp-action="Login" method="post">
     <div class="mb-3">
         <label for="email" class="form-label">Email</label>
         <input type="email" class="form-control" name="email" required />

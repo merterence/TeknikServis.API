@@ -19,6 +19,18 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
+        // sesiondaki kullaniciId null ise kullanýcý/login sayfasýna yönlendir
+
+        if (HttpContext.Session.GetInt32("kullaniciId") == null)
+        {
+            // http://dfgdfgdfg.kullanýcý/login url sine yönlendir
+            //return RedirectToAction("Login", "Kullanici");
+
+            return Redirect("Kullanici/login");
+
+
+        }
+
         List<ServisTalebiDto> servisTalepleri = new();
 
         using (var client = new HttpClient())

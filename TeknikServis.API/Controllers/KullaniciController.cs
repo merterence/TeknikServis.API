@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TeknikServis.API.Models;
+using TeknikServis.API.Models.Dto;
 
 namespace TeknikServis.API.Controllers
 {
@@ -41,19 +43,24 @@ namespace TeknikServis.API.Controllers
             });
         }
 
-        [HttpPost("giris")]
-        public IActionResult Giris([FromBody] Kullanici kullanici)
+        [HttpPost("login")]
+        public async Task<ActionResult<Kullanici>> Login( LoginModel loginModel)
         {
-            if (string.IsNullOrEmpty(kullanici.Email) || string.IsNullOrEmpty(kullanici.Sifre))
-                return BadRequest("Email ve şifre boş olamaz.");
 
-            var mevcut = _context.Kullanicilar.FirstOrDefault(x =>
-                x.Email == kullanici.Email && x.Sifre == kullanici.Sifre);
-
-            if (mevcut == null)
+            if (string.IsNullOrEmpty(loginModel.Email) || string.IsNullOrEmpty(loginModel.Sifre))
+            {
+                return BadRequest("Email ve şifre boş bırakılamaz.");
+            }
+            var kullanici = await _context.Kullanicilar
+                .FirstOrDefaultAsync(x => x.Email == loginModel.Email && x.Sifre == loginModel.Sifre);
+            if (kullanici == null)
+            {
                 return Unauthorized("Email veya şifre hatalı.");
-
-            return Ok("Giriş başarılı.");
+            }
+            // ✅ JSON formatında cevap dönülüyor
+            return Ok(
+            kullanici);
         }
+
     }
 }

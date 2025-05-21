@@ -1,4 +1,4 @@
-﻿namespace TeknikServis.API.Models
+﻿namespace TeknikServis.UI.Models.dto
 {
     public class Kullanici
     {
@@ -9,7 +9,7 @@
         public string? Rol { get; set; } = "Kullanici";
         public bool IsAdmin { get; set; }
 
-        public virtual ICollection<ServisTalebi>? ServisTalepleri { get; set; } 
+        public virtual ICollection<ServisTalebi> ServisTalepleri { get; set; }
 
     }
 }
