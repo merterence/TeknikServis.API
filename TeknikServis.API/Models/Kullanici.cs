@@ -9,7 +9,7 @@
         public string? Rol { get; set; } = "Kullanici";
         public bool IsAdmin { get; set; }
 
-        public virtual ICollection<ServisTalebi>? ServisTalepleri { get; set; } 
+        public virtual ICollection<ServisTalebi> ServisTalepleri { get; set; } 
 
     }
 }

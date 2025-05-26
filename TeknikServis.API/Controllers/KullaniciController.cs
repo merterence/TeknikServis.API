@@ -17,19 +17,26 @@ namespace TeknikServis.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult KayitOl([FromBody] Kullanici kullanici)
+        public async Task<IActionResult> KayitOl([FromBody] KullaniciKayitDto dto)
         {
-            if (string.IsNullOrEmpty(kullanici.Email) || string.IsNullOrEmpty(kullanici.Sifre))
+            if (string.IsNullOrEmpty(dto.Email) || string.IsNullOrEmpty(dto.Sifre))
             {
                 return BadRequest("Email ve şifre boş bırakılamaz.");
             }
 
             // Zaten var mı diye kontrol
-            var mevcut = _context.Kullanicilar.FirstOrDefault(x => x.Email == kullanici.Email);
+            var mevcut = _context.Kullanicilar.FirstOrDefault(x => x.Email == dto.Email);
             if (mevcut != null)
             {
                 return Conflict("Bu email ile kayıtlı kullanıcı zaten var.");
             }
+            var kullanici = new Kullanici
+            {
+                AdSoyad = dto.AdSoyad,
+                Email = dto.Email,
+                Sifre = dto.Sifre,
+                IsAdmin = false
+            };
 
             _context.Kullanicilar.Add(kullanici);
             _context.SaveChanges();
