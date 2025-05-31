@@ -60,6 +60,25 @@ namespace TeknikServis.API.Controllers
             return talepler;
         }
 
+        [HttpGet("KullaniciyaGoreListele/{id}")]
+        public async Task<IActionResult> KullaniciyaGoreListele(int id)
+        {
+            var talepler = await _context.ServisTalepleri
+                .Where(t => t.KullaniciId == id)
+                .ToListAsync();
+
+            var dtoList = talepler.Select(t => new ServisTalebiDto
+            {
+                Id = t.Id,
+                UrunAdi = t.UrunAdi,
+                Aciklama = t.Aciklama,
+                TalepDurumu = t.TalepDurumu,
+                TalepTarihi = t.TalepTarihi
+            }).ToList();
+
+            return Ok(dtoList);
+        }
+
 
         // 2️⃣ Belirli bir talebi getir
         [HttpGet("{id}")]

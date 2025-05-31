@@ -3,7 +3,7 @@
     var kullaniciId = Context.Session.GetInt32("kullaniciId") ?? 0;
 }
 
-<h2>Teknik Servis Talebi Oluştur</h2>
+<h2 class ="mb-4 text-center text-info">Teknik Servis Talebi Oluştur</h2>
 
 <form id="talepForm">
     <div class="form-group">
@@ -18,7 +18,7 @@
 
     <input type="hidden" id="kullaniciIdInput" value="@kullaniciId" />
 
-    <button type="button" onclick="talepGonder()" class="btn btn-primary">Gönder</button>
+    <button type="button" onclick="talepGonder()" class="btn btn-primary btn-sm rounded shadow-sm px-3">Gönder</button>
 </form>
 
 <script>

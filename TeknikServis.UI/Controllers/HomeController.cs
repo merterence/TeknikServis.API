@@ -19,16 +19,11 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
-        // sesiondaki kullaniciId null ise kullanýcý/login sayfasýna yönlendir
+        var kullaniciId = HttpContext.Session.GetInt32("kullaniciId");
 
-        if (HttpContext.Session.GetInt32("kullaniciId") == null)
+        if (kullaniciId == null)
         {
-            // http://dfgdfgdfg.kullanýcý/login url sine yönlendir
-            //return RedirectToAction("Login", "Kullanici");
-
-            return Redirect("Kullanici/login");
-
-
+            return RedirectToAction("Login", "Kullanici");
         }
 
         List<ServisTalebiDto> servisTalepleri = new();
@@ -39,7 +34,8 @@ public class HomeController : Controller
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            HttpResponseMessage response = await client.GetAsync("api/ServisTalebi");
+            // ?? Sadece kullanýcýnýn taleplerini getiriyoruz
+            HttpResponseMessage response = await client.GetAsync($"api/ServisTalebi/KullaniciyaGoreListele/{kullaniciId}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -49,6 +45,10 @@ public class HomeController : Controller
         }
 
         return View(servisTalepleri);
+    }
+    public IActionResult Iletisim()
+    {
+        return View();
     }
 
     public IActionResult Privacy()

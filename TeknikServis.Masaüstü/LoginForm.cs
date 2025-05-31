@@ -38,11 +38,17 @@ namespace TeknikServis.Masaüstü
 
             using (var httpClient = new HttpClient())
             {
-                string url = $"https://localhost:44365/api/Kullanici/login?email={email}&sifre={sifre}";
-
+                string url = $"https://localhost:44365/api/Kullanici/login";
+                var values = new Dictionary<string, string>
+                {
+                    { "email", email },
+                    { "sifre", sifre }
+                };
+                
+                var content = new FormUrlEncodedContent(values);
                 try
                 {
-                    var response = await httpClient.GetAsync(url);
+                    var response = await httpClient.PostAsync(url, content);
 
                     if (response.IsSuccessStatusCode)
                     {

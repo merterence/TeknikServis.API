@@ -9,40 +9,31 @@
 </head>
 <body class="container mt-5">
 
-    <h2>Teknik Servis Talebi</h2>
+    <h2 class ="mb-4 text-center text-primary">Teknik Servis Talebi</h2>
 
     <!-- ✅ Talep oluşturma linki (form yok artık) -->
-    <a class="btn btn-primary" asp-controller="ServisTalebi" asp-action="YeniTalep">Servis Talebi Oluştur</a>
+   
 
     <hr class="mt-5" />
     <h3>Gönderilen Servis Talepleri</h3>
 
-    <table class="table table-bordered mt-3">
-        <thead>
+    <table class="table table-striped table-hover table-bordered table-responsive">
+
+        <thead class="table-dark">
+
             <tr>
-                <th>Ad Soyad</th>
                 <th>Ürün</th>
                 <th>Açıklama</th>
                 <th>Durum</th>
-                <th>Adres</th>
-                <th>Sil</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var talep in Model)
             {
                 <tr>
-                    <td>@talep.KullaniciId</td>
                     <td>@talep.UrunAdi</td>
                     <td>@talep.Aciklama</td>
                     <td>@talep.TalepDurumu</td>
-                    <td>@talep.Adres</td>
-                    <td>
-                        <form asp-controller="ServisTalebi" asp-action="Sil" method="post">
-                            <input type="hidden" name="id" value="@talep.Id" />
-                            <button type="submit" class="btn btn-danger btn-sm">Sil</button>
-                        </form>
-                    </td>
                 </tr>
             }
         </tbody>

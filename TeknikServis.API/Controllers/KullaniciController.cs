@@ -51,22 +51,21 @@ namespace TeknikServis.API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<Kullanici>> Login( LoginModel loginModel)
+        public async Task<ActionResult<Kullanici>> Login([FromForm]string email,[FromForm] string sifre)
         {
-
-            if (string.IsNullOrEmpty(loginModel.Email) || string.IsNullOrEmpty(loginModel.Sifre))
+   
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(sifre))
             {
                 return BadRequest("Email ve şifre boş bırakılamaz.");
             }
             var kullanici = await _context.Kullanicilar
-                .FirstOrDefaultAsync(x => x.Email == loginModel.Email && x.Sifre == loginModel.Sifre);
+                .FirstOrDefaultAsync(x => x.Email == email && x.Sifre == sifre);
             if (kullanici == null)
             {
                 return Unauthorized("Email veya şifre hatalı.");
             }
             // ✅ JSON formatında cevap dönülüyor
-            return Ok(
-            kullanici);
+            return Ok(kullanici);
         }
 
     }

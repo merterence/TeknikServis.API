@@ -49,36 +49,7 @@ namespace TeknikServis.Masaüstü
                     string jsonData = await response.Content.ReadAsStringAsync();
                     var talepler = JsonConvert.DeserializeObject<List<ServisTalebiDto>>(jsonData);
 
-                    dataGridView1.AutoGenerateColumns = false;
-                    dataGridView1.Columns.Clear();
-
-                    var kullaniciAdSoyadColumn = new DataGridViewTextBoxColumn();
-                    kullaniciAdSoyadColumn.HeaderText = "Ad Soyad";
-                    kullaniciAdSoyadColumn.DataPropertyName = "Kullanici.AdSoyad";
-                    kullaniciAdSoyadColumn.Name = "AdSoyad";
-                    dataGridView1.Columns.Add(kullaniciAdSoyadColumn);
-
-                    var urunAdiColumn = new DataGridViewTextBoxColumn();
-                    urunAdiColumn.HeaderText = "Ürün Adı";
-                    urunAdiColumn.DataPropertyName = "UrunAdi";
-                    dataGridView1.Columns.Add(urunAdiColumn);
-
-                    var aciklamaColumn = new DataGridViewTextBoxColumn();
-                    aciklamaColumn.HeaderText = "Açıklama";
-                    aciklamaColumn.DataPropertyName = "Aciklama";
-                    dataGridView1.Columns.Add(aciklamaColumn);
-
-                    var talepDurumuColumn = new DataGridViewTextBoxColumn();
-                    talepDurumuColumn.HeaderText = "Durum";
-                    talepDurumuColumn.DataPropertyName = "TalepDurumu";
-                    dataGridView1.Columns.Add(talepDurumuColumn);
-
-                    var talepTarihiColumn = new DataGridViewTextBoxColumn();
-                    talepTarihiColumn.HeaderText = "Tarih";
-                    talepTarihiColumn.DataPropertyName = "TalepTarihi";
-                    dataGridView1.Columns.Add(talepTarihiColumn);
-
-                    dataGridView1.DataSource = tumTalepler.Select(t => new
+                    dataGridView1.DataSource = talepler.Select(t => new
                     {
                         AdSoyad = t.Kullanici?.AdSoyad ?? "Bilinmiyor",
                         UrunAdi = t.UrunAdi,
@@ -87,10 +58,50 @@ namespace TeknikServis.Masaüstü
                         TalepTarihi = t.TalepTarihi
                     }).ToList();
 
-                    oncekiIdler = tumTalepler
-                        .Where(t => t != null)
-                        .Select(t => t.Id)
-                        .ToList();
+                    
+
+                    //dataGridView1.AutoGenerateColumns = false;
+                    //dataGridView1.Columns.Clear();
+
+                    //var kullaniciAdSoyadColumn = new DataGridViewTextBoxColumn();
+                    //kullaniciAdSoyadColumn.HeaderText = "Ad Soyad";
+                    //kullaniciAdSoyadColumn.DataPropertyName = "Kullanici.AdSoyad";
+                    //kullaniciAdSoyadColumn.Name = "AdSoyad";
+                    //dataGridView1.Columns.Add(kullaniciAdSoyadColumn);
+
+                    //var urunAdiColumn = new DataGridViewTextBoxColumn();
+                    //urunAdiColumn.HeaderText = "Ürün Adı";
+                    //urunAdiColumn.DataPropertyName = "UrunAdi";
+                    //dataGridView1.Columns.Add(urunAdiColumn);
+
+                    //var aciklamaColumn = new DataGridViewTextBoxColumn();
+                    //aciklamaColumn.HeaderText = "Açıklama";
+                    //aciklamaColumn.DataPropertyName = "Aciklama";
+                    //dataGridView1.Columns.Add(aciklamaColumn);
+
+                    //var talepDurumuColumn = new DataGridViewTextBoxColumn();
+                    //talepDurumuColumn.HeaderText = "Durum";
+                    //talepDurumuColumn.DataPropertyName = "TalepDurumu";
+                    //dataGridView1.Columns.Add(talepDurumuColumn);
+
+                    //var talepTarihiColumn = new DataGridViewTextBoxColumn();
+                    //talepTarihiColumn.HeaderText = "Tarih";
+                    //talepTarihiColumn.DataPropertyName = "TalepTarihi";
+                    //dataGridView1.Columns.Add(talepTarihiColumn);
+
+                    //dataGridView1.DataSource = tumTalepler.Select(t => new
+                    //{
+                    //    AdSoyad = t.Kullanici?.AdSoyad ?? "Bilinmiyor",
+                    //    UrunAdi = t.UrunAdi,
+                    //    Aciklama = t.Aciklama,
+                    //    TalepDurumu = t.TalepDurumu,
+                    //    TalepTarihi = t.TalepTarihi
+                    //}).ToList();
+
+                    //oncekiIdler = tumTalepler
+                    //    .Where(t => t != null)
+                    //    .Select(t => t.Id)
+                    //    .ToList();
                 }
                 else
                 {
