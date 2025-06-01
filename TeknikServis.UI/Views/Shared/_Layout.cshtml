@@ -20,22 +20,12 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Anasayfa</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Hakkında</a>
-                        </li>
+                       
                         @{
                             var kullaniciId = Context.Session.GetString("kullaniciId");
                         }
 
-                        @if (string.IsNullOrEmpty(kullaniciId))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Kullanici" asp-action="Kayit">Kayıt Ol</a>
-                            </li>
-                        }
+                        
 
 
                         @* Oturum açılmışsa hoş geldin mesajı, çıkış ve taleplerim linki *@
