@@ -28,18 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginForm));
             this.label1 = new System.Windows.Forms.Label();
             this.txtEmail = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtSifre = new System.Windows.Forms.TextBox();
-            this.chkAdminMi = new System.Windows.Forms.CheckBox();
             this.btnGiris = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(60, 101);
+            this.label1.Location = new System.Drawing.Point(301, 48);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(41, 16);
             this.label1.TabIndex = 0;
@@ -47,7 +49,7 @@
             // 
             // txtEmail
             // 
-            this.txtEmail.Location = new System.Drawing.Point(223, 95);
+            this.txtEmail.Location = new System.Drawing.Point(379, 45);
             this.txtEmail.Name = "txtEmail";
             this.txtEmail.Size = new System.Drawing.Size(100, 22);
             this.txtEmail.TabIndex = 1;
@@ -55,7 +57,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(60, 176);
+            this.label2.Location = new System.Drawing.Point(301, 92);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(34, 16);
             this.label2.TabIndex = 2;
@@ -63,46 +65,49 @@
             // 
             // txtSifre
             // 
-            this.txtSifre.Location = new System.Drawing.Point(223, 173);
+            this.txtSifre.Location = new System.Drawing.Point(369, 86);
             this.txtSifre.Name = "txtSifre";
             this.txtSifre.PasswordChar = '*';
             this.txtSifre.Size = new System.Drawing.Size(100, 22);
             this.txtSifre.TabIndex = 3;
             // 
-            // chkAdminMi
-            // 
-            this.chkAdminMi.AutoSize = true;
-            this.chkAdminMi.Location = new System.Drawing.Point(63, 258);
-            this.chkAdminMi.Name = "chkAdminMi";
-            this.chkAdminMi.Size = new System.Drawing.Size(97, 20);
-            this.chkAdminMi.TabIndex = 4;
-            this.chkAdminMi.Text = "Admin Giriş";
-            this.chkAdminMi.UseVisualStyleBackColor = true;
-            // 
             // btnGiris
             // 
-            this.btnGiris.Location = new System.Drawing.Point(248, 255);
+            this.btnGiris.Location = new System.Drawing.Point(304, 127);
             this.btnGiris.Name = "btnGiris";
-            this.btnGiris.Size = new System.Drawing.Size(75, 23);
+            this.btnGiris.Size = new System.Drawing.Size(175, 23);
             this.btnGiris.TabIndex = 5;
             this.btnGiris.Text = "Giriş Yap";
             this.btnGiris.UseVisualStyleBackColor = true;
             this.btnGiris.Click += new System.EventHandler(this.btnGiris_Click);
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox1.Location = new System.Drawing.Point(37, 48);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(218, 80);
+            this.pictureBox1.TabIndex = 6;
+            this.pictureBox1.TabStop = false;
+            // 
             // LoginForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(544, 181);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.btnGiris);
-            this.Controls.Add(this.chkAdminMi);
             this.Controls.Add(this.txtSifre);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtEmail);
             this.Controls.Add(this.label1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "LoginForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "LoginForm";
             this.Load += new System.EventHandler(this.LoginForm_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -114,7 +119,7 @@
         private System.Windows.Forms.TextBox txtEmail;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtSifre;
-        private System.Windows.Forms.CheckBox chkAdminMi;
         private System.Windows.Forms.Button btnGiris;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

@@ -18,6 +18,7 @@ namespace TeknikServis.Masaüstü
         public LoginForm()
         {
             InitializeComponent();
+            this.Text = "ServisTalepYönetim";
         }
 
         private void LoginForm_Load(object sender, EventArgs e)

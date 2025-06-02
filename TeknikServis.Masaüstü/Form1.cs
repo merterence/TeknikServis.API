@@ -187,5 +187,10 @@ namespace TeknikServis.Masaüstü
                 MessageBox.Show("Hata oluştu: " + ex.Message);
             }
         }
+
+        private void txtUrunAdi_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
