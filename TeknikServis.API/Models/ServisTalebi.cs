@@ -11,6 +11,10 @@ namespace TeknikServis.API.Models
         [Required]
         public int KullaniciId { get; set; }
 
+        public int? UrunId { get; set; }
+
+        public Urun? Urun { get; set; }
+
         [Required]
         public string UrunAdi { get; set; }
 

@@ -2,7 +2,7 @@
 
 namespace TeknikServis.Masaüstü.Models
 {
-    public class ServisTalebiDto
+    public class ServisTalebiDto // Request -> Response
     {
         public int Id { get; set; }
         public string? UrunAdi { get; set; }

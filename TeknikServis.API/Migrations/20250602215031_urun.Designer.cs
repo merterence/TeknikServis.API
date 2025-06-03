@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TeknikServis.API.Models;
 
@@ -11,9 +12,11 @@ using TeknikServis.API.Models;
 namespace TeknikServis.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250602215031_urun")]
+    partial class urun
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,14 +82,9 @@ namespace TeknikServis.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UrunId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("KullaniciId");
-
-                    b.HasIndex("UrunId");
 
                     b.ToTable("ServisTalepleri");
                 });
@@ -123,19 +121,10 @@ namespace TeknikServis.API.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("TeknikServis.API.Models.Urun", null)
-                        .WithMany("ServisTalepleri")
-                        .HasForeignKey("UrunId");
-
                     b.Navigation("Kullanici");
                 });
 
             modelBuilder.Entity("TeknikServis.API.Models.Kullanici", b =>
-                {
-                    b.Navigation("ServisTalepleri");
-                });
-
-            modelBuilder.Entity("TeknikServis.API.Models.Urun", b =>
                 {
                     b.Navigation("ServisTalepleri");
                 });

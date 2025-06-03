@@ -37,6 +37,8 @@ namespace TeknikServis.UI.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
+            model.TalepTarihi = DateTime.Now;
+
             var jsonData = JsonConvert.SerializeObject(model);
             var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 

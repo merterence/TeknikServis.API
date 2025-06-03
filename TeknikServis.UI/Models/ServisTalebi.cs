@@ -1,10 +1,14 @@
-﻿namespace TeknikServis.UI.Models
+﻿using TeknikServis.DTO;
+
+namespace TeknikServis.UI.Models
 {
     public class ServisTalebi
     {
         public int Id { get; set; }  // ID otomatik atanmalı, bu yüzden formda göndermeyeceğiz
 
         public string? UrunAdi { get; set; }
+
+        public int UrunId { get; set; }
 
         public string? Aciklama { get; set; }
 
@@ -17,5 +21,7 @@
         public string? Adres { get; set; }    // İleride kullanıcıdan alınacak
 
         public string? TalepDurumu { get; set; } = "Oluşturuldu";  // Varsayılan
+
+        Deneme Deneme { get; set; } = new Deneme(); // Örnek DTO, ileride kullanılabilir
     }
 }

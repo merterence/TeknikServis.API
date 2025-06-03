@@ -2,201 +2,210 @@
     ViewData["Title"] = "Giriş Yap";
 }
 
+<style>
+    body {
+        margin: 0;
+        background: linear-gradient(to bottom right, cornflowerblue, lightblue);
+        font-family: 'Segoe UI', sans-serif;
+        height: 100vh;
+    }
 
-    <style>
-        body {
-            background: linear-gradient(to bottom right, #ff6a6a, #ff9e80);
-            font-family: 'Segoe UI', sans-serif;
-        }
+    .page-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+       /* height: 100vh;*/
+        padding: 10px;
+    }
 
-        .tab-switch {
-            background-color: white;
-            border-radius: 50px;
-            padding: 5px;
-            display: inline-flex;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
+    .tab-switch {
+        background-color: white;
+        border-radius: 50px;
+        padding: 5px;
+        display: inline-flex;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        justify-content: center;
+        width: 100%;
+    }
 
-            .tab-switch button {
-                border: none;
-                border-radius: 50px;
-                padding: 10px 20px;
-                font-weight: bold;
-                cursor: pointer;
-                background-color: transparent;
-                color: #999;
-            }
-
-            .tab-switch .active {
-                background-color: #ff6a6a;
-                color: white;
-            }
-
-        .form-container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-        }
-
-        .input-group-text {
-            background-color: transparent;
+        .tab-switch button {
             border: none;
-        }
-
-        .form-control:focus {
-            box-shadow: none;
-            border-color: #ff6a6a;
-        }
-
-        .footer {
-            background-color: #007bff;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            border-radius: 0 0 10px 10px;
-            margin-top: 20px;
-            width: 100%;
-        }
-
-        .eye-icon {
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-weight: bold;
             cursor: pointer;
+            background-color: transparent;
+            color: #999;
         }
 
-        .hidden {
-            display: none;
+        .tab-switch .active {
+            background-color: cornflowerblue;
+            color: white;
         }
-    </style>
 
-<div class="row">
-    <!-- Sekme butonları -->
-    <div class="tab-switch mb-4 col-3">
-        <button id="btn-login" class="active" onclick="switchTab('login')">Giriş Ekranı</button>
-        <button id="btn-signup" onclick="switchTab('signup')">Yeni Kullanıcı</button>
-    </div>
-</div>
-<div class="row">
-    <!-- Form alanı -->
-    <div class="form-container col-4">
+    .form-container {
+        background-color: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        width: 350px;
+    }
 
-        <!-- Giriş Formu -->
-    <form id="login-form" asp-area="" asp-controller="Kullanici" asp-action="Login" method="post">
-            <div class="mb-3 input-group">
-                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                <input type="email" class="form-control" name="email" placeholder="E-posta Adresi">
+    .input-group-text {
+        background-color: transparent;
+        border: none;
+    }
+
+    .form-control:focus {
+        box-shadow: none;
+        border-color: cornflowerblue;
+    }
+
+    .eye-icon {
+        cursor: pointer;
+    }
+
+    .hidden {
+        display: none;
+    }
+</style>
+
+
+
+<div class="page-container">
+    <div>
+        <div class="tab-switch text-center">
+            <button id="btn-login" class="active" onclick="switchTab('login')">Giriş Ekranı</button>
+            <button id="btn-signup" onclick="switchTab('signup')">Yeni Kullanıcı</button>
+        </div>
+
+        <div class="form-container">
+            <div class="row"> 
+                <img src="~/img/logo.png" class="mx-auto" style="width:120px;height:100px"/>
             </div>
+            <!-- Giriş Formu -->
+            <form id="login-form" asp-area="" asp-controller="Kullanici" asp-action="Login" method="post">
+                <div class="mb-3">
+                    <label class="form-label" for="email">E-Posta</label>
+                    <input type="email" class="form-control" name="email" id="email">
+                </div>
+                <label class="form-label" for="sifre">Şifre</label>
+                <div class="mb-3 input-group">
+                   
+                    <input type="password" name="sifre" class="form-control sifre1" id="sifre">
+                    <span class="input-group-text eye-icon" onclick="togglePassword();"><i class="bi bi-eye"></i></span>
+                </div>
 
-            <div class="mb-3 input-group">
-                <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                <input type="password" name="sifre" class="form-control" placeholder="Şifre">
-                <span class="input-group-text eye-icon"><i class="bi bi-eye"></i></span>
-            </div>
+                <button type="submit" class="btn d-block mx-auto" style="background-color:cornflowerblue;color:white">Giriş Yap</button>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="beniHatirla" name="darkmode" value="no" >
+                    <label class="form-check-label" for="mySwitch">Beni Hatırla</label>
+                </div>
+            </form>
 
-            <button type="submit" class="btn btn-danger w-100 mt-2">Giriş Yap</button>
-        </form>
+            <!-- Kayıt Formu -->
+            <form id="kayitForm" class="hidden">
+                <div class="mb-3">
+                    <label for="adSoyad" class="form-label">Ad Soyad</label>
+                    <input type="text" class="form-control" id="adSoyad" required />
+                </div>
 
-        <!-- Kayıt Formu -->
-    <form id="kayitForm" class="hidden">
-        <div class="mb-3">
-            <label for="adSoyad" class="form-label">Ad Soyad</label>
-            <input type="text" class="form-control" id="adSoyad" required />
-        </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" required />
+                </div>
 
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" required />
-        </div>
+                <div class="mb-3">
+                    <label for="sifre" class="form-label">Şifre</label>
+                    <input type="password" class="form-control" id="sifre" required />
+                </div>
 
-        <div class="mb-3">
-            <label for="sifre" class="form-label">Şifre</label>
-            <input type="password" class="form-control" id="sifre" required />
-        </div>
+                <div class="mb-3">
+                    <label for="sifre" class="form-label">Şifre Tekrar</label>
+                    <input type="password" class="form-control" id="tekrarsifre" required />
+                </div>
 
-        <button type="button" class="btn btn-success" onclick="kayitOl()">Kayıt Ol</button>
-    </form>
+                <button type="button" class="btn d-block mx-auto" style="background-color:cornflowerblue;color:white"  onclick="kayitOl()">Kayıt Ol</button>
+            </form>
 
-    <script>
-        async function kayitOl() {
-            const adSoyad = document.getElementById("adSoyad").value;
-            const email = document.getElementById("email").value;
-            const sifre = document.getElementById("sifre").value;
-
-            const kullanici = {
-                adSoyad: adSoyad,
-                email: email,
-                sifre: sifre
-            };
-
-            try {
-                const response = await fetch("https://localhost:44365/api/Kullanici", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(kullanici)
-                });
-
-                if (response.ok) {
-                    const sonuc = await response.json();
-                    alert("Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz...");
-                    window.location.href = sonuc.yonlendir;
-                } else {
-                    const hata = await response.text();
-                    alert("Kayıt başarısız: " + hata);
-                }
-            } catch (error) {
-                alert("Bağlantı hatası: " + error);
+            @if (ViewBag.Mesaj != null)
+            {
+                <div class="alert alert-danger mt-3">@ViewBag.Mesaj</div>
             }
-        }
-    </script>
-
+        </div>
     </div>
-
 </div>
 
-    <!-- JavaScript -->
-    <script>
-        function switchTab(tab) {
-          const loginBtn = document.getElementById("btn-login");
-          const signupBtn = document.getElementById("btn-signup");
-          const loginForm = document.getElementById("login-form");
-      const signupForm = document.getElementById("kayitForm");
+<!-- JavaScript -->
+<script>
+    function switchTab(tab) {
+        const loginBtn = document.getElementById("btn-login");
+        const signupBtn = document.getElementById("btn-signup");
+        const loginForm = document.getElementById("login-form");
+        const signupForm = document.getElementById("kayitForm");
 
-          if (tab === "login") {
+        if (tab === "login") {
             loginBtn.classList.add("active");
             signupBtn.classList.remove("active");
             loginForm.classList.remove("hidden");
             signupForm.classList.add("hidden");
-          } else {
+        } else {
             signupBtn.classList.add("active");
             loginBtn.classList.remove("active");
             signupForm.classList.remove("hidden");
             loginForm.classList.add("hidden");
-          }
         }
-    </script>
+    }
 
+    async function kayitOl() {
+        const adSoyad = document.getElementById("adSoyad").value;
+        const email = document.getElementById("email").value;
+        const sifre = document.getElementById("sifre").value;
 
+           const tekrarsifre = document.getElementById("tekrarsifre").value;
 
+           if(sifre != tekrarsifre){
+            alert("İki şifre aynı olmalı!");
+            return;
+           }
 
+        const kullanici = {
+            adSoyad: adSoyad,
+            email: email,
+            sifre: sifre
+        };
 
+        try {
+            const response = await fetch("https://localhost:44365/api/Kullanici", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(kullanici)
+            });
 
+            if (response.ok) {
+                const sonuc = await response.json();
+                alert("Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz...");
+                window.location.href = sonuc.yonlendir;
+            } else {
+                const hata = await response.text();
+                alert("Kayıt başarısız: " + hata);
+            }
+        } catch (error) {
+            alert("Bağlantı hatası: " + error);
+        }
+    }
 
-@if (ViewBag.Mesaj != null)
-{
-    <div class="alert alert-danger mt-3">@ViewBag.Mesaj</div>
-}
-
-<!-- 🍪 Sayfa yüklendiğinde cookie varsa inputları otomatik doldur -->
-<script>
     window.onload = function () {
         var email = getCookie("email");
-        var sifre = getCookie("sifre");
+        
 
         if (email && sifre) {
-            document.getElementById("email").value = email;
-            document.getElementById("sifre").value = sifre;
-            document.getElementById("beniHatirla").checked = true;
+            document.getElementById("email").value = email;   
+            var check = document.getElementById("beniHatirla");
+            if (check) check.checked = true;
         }
     }
 
@@ -207,10 +216,27 @@
     }
 </script>
 
-<!-- ✅ Login başarılı olduktan sonra kullanıcı ID'sini LocalStorage'a kaydediyoruz -->
+<script>
+    function togglePassword() {
+      const passwordInput =  document.getElementById("sifre");
+      const icon = document.querySelector(".eye-icon");
+
+      if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+      } else {
+        passwordInput.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+      }
+    }
+</script>
+
 @if (TempData["kullaniciId"] != null)
 {
     <script>
         localStorage.setItem("kullaniciId", "@TempData["kullaniciId"]");
     </script>
+
 }

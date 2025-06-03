@@ -33,6 +33,7 @@ namespace TeknikServis.Masaüstü
             this.Text = $"Hoş geldin, {_aktifKullanici.AdSoyad}";
         }
 
+        List<ServisTalebiDto> liste;
 
         private async void YukleVerileri()
         {
@@ -49,7 +50,9 @@ namespace TeknikServis.Masaüstü
                     string jsonData = await response.Content.ReadAsStringAsync();
                     var talepler = JsonConvert.DeserializeObject<List<ServisTalebiDto>>(jsonData);
 
-                    dataGridView1.DataSource = talepler.Select(t => new
+                    liste = talepler.ToList();
+
+                    dataGridView1.DataSource = liste.Select(t => new
                     {
                         AdSoyad = t.Kullanici?.AdSoyad ?? "Bilinmiyor",
                         UrunAdi = t.UrunAdi,
@@ -58,7 +61,9 @@ namespace TeknikServis.Masaüstü
                         TalepTarihi = t.TalepTarihi
                     }).ToList();
 
-                    
+                   
+
+
 
                     //dataGridView1.AutoGenerateColumns = false;
                     //dataGridView1.Columns.Clear();
@@ -166,7 +171,9 @@ namespace TeknikServis.Masaüstü
                     {
                         System.Media.SystemSounds.Asterisk.Play();
 
-                        dataGridView1.DataSource = talepler.Select(t => new
+                        liste = talepler.ToList();
+
+                        dataGridView1.DataSource = liste.Select(t => new
                         {
                             AdSoyad = t.Kullanici?.AdSoyad ?? "Bilinmiyor",
                             UrunAdi = t.UrunAdi,
@@ -191,6 +198,20 @@ namespace TeknikServis.Masaüstü
         private void txtUrunAdi_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnFiltrele_Click(object sender, EventArgs e)
+        {
+            var filteredList = liste.Where(s => s.TalepTarihi >= dtBaslangicTarihi.Value && s.TalepTarihi <= dtBitisTarihi.Value.AddDays(1)).ToList();
+
+            dataGridView1.DataSource = filteredList.Select(t => new
+            {
+                AdSoyad = t.Kullanici?.AdSoyad ?? "Bilinmiyor",
+                UrunAdi = t.UrunAdi,
+                Aciklama = t.Aciklama,
+                TalepDurumu = t.TalepDurumu,
+                TalepTarihi = t.TalepTarihi
+            }).ToList();
         }
     }
 }

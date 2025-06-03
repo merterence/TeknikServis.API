@@ -110,6 +110,7 @@
             this.btnFiltrele.TabIndex = 7;
             this.btnFiltrele.Text = "Filtrele";
             this.btnFiltrele.UseVisualStyleBackColor = true;
+            this.btnFiltrele.Click += new System.EventHandler(this.btnFiltrele_Click);
             // 
             // Form1
             // 

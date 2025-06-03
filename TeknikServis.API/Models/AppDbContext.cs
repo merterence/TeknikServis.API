@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TeknikServis.API.Models
 {
@@ -10,6 +11,7 @@ namespace TeknikServis.API.Models
 
         public DbSet<ServisTalebi> ServisTalepleri { get; set; } // Var olan tablo
         public DbSet<Kullanici> Kullanicilar { get; set; }        // Yeni eklenen tablo ✅
+        public DbSet<Urun> Urunler { get; set; } // Yeni eklenen tablo ✅
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -21,5 +23,8 @@ namespace TeknikServis.API.Models
 
             base.OnModelCreating(modelBuilder);
         }
+
+   
+
     }
 }
