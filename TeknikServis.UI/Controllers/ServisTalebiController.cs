@@ -6,20 +6,39 @@ using TeknikServis.UI.Models;
 using Newtonsoft.Json;
 using TeknikServis.UI.Models.dto;
 using Microsoft.AspNetCore.Http;
+using TeknikServis.DTO;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace TeknikServis.UI.Controllers
 {
     public class ServisTalebiController : Controller
     {
         private readonly HttpClient _httpClient;
+        private readonly HttpClient _httpClient2;
 
         public ServisTalebiController()
         {
             _httpClient = new HttpClient();
+            _httpClient2 = new HttpClient();
         }
 
-        public IActionResult YeniTalep()
+        public async Task<IActionResult> YeniTalep()
         {
+            var response = await _httpClient2.GetAsync("https://localhost:44365/api/Urun");
+            var urunler = new List<UrunDto>();
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                urunler = JsonConvert.DeserializeObject<List<UrunDto>>(json);
+            }
+
+            ViewData["Urunler"] = urunler.Select(u => new SelectListItem
+            {
+                Value = u.Id.ToString(),
+                Text = u.Ad
+            });
+
             var ad = HttpContext.Session.GetString("adSoyad");
             var email = HttpContext.Session.GetString("email");
 
@@ -50,6 +69,20 @@ namespace TeknikServis.UI.Controllers
                 return View();
             }
 
+            var response2 = await _httpClient2.GetAsync("https://localhost:44365/api/Urun");
+            var urunler = new List<UrunDto>();
+
+            if (response2.IsSuccessStatusCode)
+            {
+                var json = await response2.Content.ReadAsStringAsync();
+                urunler = JsonConvert.DeserializeObject<List<UrunDto>>(json);
+            }
+
+            ViewData["Urunler"] = urunler.Select(u => new SelectListItem
+            {
+                Value = u.Id.ToString(),
+                Text = u.Ad
+            });
             ViewBag.Mesaj = "Talep oluşturulurken hata oluştu!";
             return View(model);
         }

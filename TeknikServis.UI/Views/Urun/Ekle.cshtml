@@ -1,0 +1,34 @@
+﻿@model TeknikServis.DTO.UrunDto
+@using TeknikServis.DTO;
+
+@{
+    ViewData["Title"] = "Ürün Ekle";
+}
+
+<h2>Yeni Ürün Ekle</h2>
+
+<form asp-controller="Urun" asp-action="Ekle" method="post">
+    <div class="form-group">
+        <label for="Ad">Ürün Adı</label>
+        <input asp-for="Ad" class="form-control" placeholder="Ürün adını girin" />
+    </div>
+
+    <div class="form-group">
+        <label for="Kategorisi">Kategori</label>
+        <select asp-for="Kategorisi" class="form-control">
+            <option value="">-- Seçiniz --</option>
+            @foreach (var kategori in Enum.GetValues(typeof(Kategori)))
+            {
+                <option value="@kategori">@kategori</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="Aciklama">Açıklama</label>
+        <textarea asp-for="Aciklama" class="form-control" rows="3" placeholder="Açıklama girin..."></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Ekle</button>
+    <a asp-action="Index" class="btn btn-secondary mt-3">Listeye Dön</a>
+</form>

@@ -25,6 +25,7 @@ namespace TeknikServis.API.Controllers
         {
             return await _context.ServisTalepleri
                 .Include(t => t.Kullanici) // Kullanıcı bilgilerini de getiriyoruz
+                .Include(t => t.Urun)
                 .ToListAsync();
         }
 
@@ -105,6 +106,7 @@ namespace TeknikServis.API.Controllers
             {
                 KullaniciId = kullaniciId,
                 UrunAdi = dto.UrunAdi,
+                UrunId = dto.UrunId,
                 Aciklama = dto.Aciklama,
                 TalepDurumu = dto.TalepDurumu ?? "Oluşturuldu",
                 TalepTarihi = dto.TalepTarihi ?? DateTime.Now

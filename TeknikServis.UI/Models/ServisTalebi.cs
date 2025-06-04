@@ -1,4 +1,5 @@
 ﻿using TeknikServis.DTO;
+using TeknikServis.UI.Models.dto;
 
 namespace TeknikServis.UI.Models
 {
@@ -23,5 +24,7 @@ namespace TeknikServis.UI.Models
         public string? TalepDurumu { get; set; } = "Oluşturuldu";  // Varsayılan
 
         Deneme Deneme { get; set; } = new Deneme(); // Örnek DTO, ileride kullanılabilir
+
+        public virtual Kullanici? Kullanici { get; set; }
     }
 }

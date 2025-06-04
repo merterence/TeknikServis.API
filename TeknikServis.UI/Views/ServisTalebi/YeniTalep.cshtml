@@ -1,14 +1,16 @@
-﻿@{
+﻿@model TeknikServis.UI.Models.ServisTalebi
+
+@{
     ViewData["Title"] = "Teknik Servis Talebi";
     var kullaniciId = Context.Session.GetInt32("kullaniciId") ?? 0;
 }
 
 <h2 class ="mb-4 text-center text-info">Teknik Servis Talebi Oluştur</h2>
 
-<form id="talepForm">
+<form id="talepForm" asp-action="YeniTalep">
     <div class="form-group">
         <label for="urunAdi">Ürün Adı</label>
-        <input type="text" class="form-control" id="urunAdi" name="urunAdi" required />
+        <select asp-for="UrunId" name="UrunId" id="UrunId" asp-items="ViewBag.Urunler" class="form-control"></select>
     </div>
 
     <div class="form-group">
@@ -18,7 +20,8 @@
 
     <input type="hidden" id="kullaniciIdInput" value="@kullaniciId" />
 
-    <button type="button" onclick="talepGonder()" class="btn btn-primary btn-sm rounded shadow-sm px-3">Gönder</button>
+  @*   <input type="submit" value="Gönder"/> *@
+   <button type="button" onclick="talepGonder()" class="btn btn-primary btn-sm rounded shadow-sm px-3">Gönder</button> 
 </form>
 
 <script>
@@ -31,7 +34,8 @@
         }
 
         const talep = {
-            urunAdi: document.getElementById("urunAdi").value,
+           urunAdi: "",
+           urunId: document.getElementById("UrunId").value,
             aciklama: document.getElementById("aciklama").value,
             kullaniciId: kullaniciId,
             talepDurumu: "Oluşturuldu",

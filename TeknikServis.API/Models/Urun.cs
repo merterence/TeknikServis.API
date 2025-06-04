@@ -7,6 +7,6 @@
         public Kategori Kategorisi { get; set; }
 
         public string Aciklama { get; set; }
-        public List<ServisTalebi> ServisTalepleri { get; set; }
+ 
     }
 }

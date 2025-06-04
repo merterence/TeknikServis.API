@@ -28,6 +28,6 @@ namespace TeknikServis.API.Models
 
         public bool Durum { get; set; } = false; // false = Bekliyor, true = Çözüldü
 
-        public virtual Kullanici Kullanici { get; set; }
+        public virtual Kullanici? Kullanici { get; set; }
     }
 }
