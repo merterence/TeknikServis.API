@@ -8,6 +8,7 @@ using TeknikServis.UI.Models.dto;
 using Microsoft.AspNetCore.Http;
 using TeknikServis.DTO;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using TeknikServis.UI.Helper;
 
 namespace TeknikServis.UI.Controllers
 {
@@ -22,22 +23,29 @@ namespace TeknikServis.UI.Controllers
             _httpClient2 = new HttpClient();
         }
 
-        public async Task<IActionResult> YeniTalep()
+        [HttpGet]
+        public async Task<JsonResult> GetUrunlerByKategori(int id)
         {
             var response = await _httpClient2.GetAsync("https://localhost:44365/api/Urun");
             var urunler = new List<UrunDto>();
-
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
                 urunler = JsonConvert.DeserializeObject<List<UrunDto>>(json);
             }
 
-            ViewData["Urunler"] = urunler.Select(u => new SelectListItem
-            {
-                Value = u.Id.ToString(),
-                Text = u.Ad
-            });
+            return Json(urunler.Where(u => u.Kategorisi == (Kategori)id));
+        }
+
+        public async Task<IActionResult> YeniTalep()
+        {
+            
+
+           
+
+            ViewBag.Kategoriler = EnumHelper.GetEnumDescriptions<Kategori>();
+
+           
 
             var ad = HttpContext.Session.GetString("adSoyad");
             var email = HttpContext.Session.GetString("email");
@@ -50,42 +58,43 @@ namespace TeknikServis.UI.Controllers
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> YeniTalep(ServisTalebiDto model)
-        {
-            if (!ModelState.IsValid)
-                return View(model);
+        //[HttpPost]
+        //public async Task<IActionResult> YeniTalep(ServisTalebiDto model)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return View(model);
 
-            model.TalepTarihi = DateTime.Now;
+        //    model.TalepTarihi = DateTime.Now;
 
-            var jsonData = JsonConvert.SerializeObject(model);
-            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+        //    var jsonData = JsonConvert.SerializeObject(model);
+        //    var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("https://localhost:44365/api/ServisTalebi", content);
+        //    var response = await _httpClient.PostAsync("https://localhost:44365/api/ServisTalebi", content);
 
-            if (response.IsSuccessStatusCode)
-            {
-                ViewBag.Mesaj = "Servis talebiniz başarıyla oluşturuldu!";
-                return View();
-            }
+        //    if (response.IsSuccessStatusCode)
+        //    {
+        //        ViewBag.Mesaj = "Servis talebiniz başarıyla oluşturuldu!";
+        //        return RedirectToAction("KendiTaleplerim");
+               
+        //    }
 
-            var response2 = await _httpClient2.GetAsync("https://localhost:44365/api/Urun");
-            var urunler = new List<UrunDto>();
+        //    var response2 = await _httpClient2.GetAsync("https://localhost:44365/api/Urun");
+        //    var urunler = new List<UrunDto>();
 
-            if (response2.IsSuccessStatusCode)
-            {
-                var json = await response2.Content.ReadAsStringAsync();
-                urunler = JsonConvert.DeserializeObject<List<UrunDto>>(json);
-            }
+        //    if (response2.IsSuccessStatusCode)
+        //    {
+        //        var json = await response2.Content.ReadAsStringAsync();
+        //        urunler = JsonConvert.DeserializeObject<List<UrunDto>>(json);
+        //    }
 
-            ViewData["Urunler"] = urunler.Select(u => new SelectListItem
-            {
-                Value = u.Id.ToString(),
-                Text = u.Ad
-            });
-            ViewBag.Mesaj = "Talep oluşturulurken hata oluştu!";
-            return View(model);
-        }
+        //    ViewData["Urunler"] = urunler.Select(u => new SelectListItem
+        //    {
+        //        Value = u.Id.ToString(),
+        //        Text = u.Ad
+        //    });
+        //    ViewBag.Mesaj = "Talep oluşturulurken hata oluştu!";
+        //    return View();
+        //}
 
         [HttpPost]
         public async Task<IActionResult> Sil(int id)
@@ -94,7 +103,7 @@ namespace TeknikServis.UI.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("KendiTaleplerim");
             }
             else
             {

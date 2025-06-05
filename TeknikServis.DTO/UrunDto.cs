@@ -1,4 +1,6 @@
 ﻿
+using System.ComponentModel;
+
 namespace TeknikServis.DTO
 {
 
@@ -15,7 +17,11 @@ namespace TeknikServis.DTO
 
     public enum Kategori
     {
-
-        ELTEMINALI, BARKODOKUYUCU, YAZICI, TELEFON, TABLET, LAPTOP, MONITOR, KULAKLIK, KLAVYE, MOUSE, DIGER
+        [Description("El Terminali")]
+        ELTERMINALI,
+        [Description("Barkod Okuyucu")]
+        BARKODOKUYUCU,
+        [Description("Yazıcı")]
+        YAZICI
     }
 }
