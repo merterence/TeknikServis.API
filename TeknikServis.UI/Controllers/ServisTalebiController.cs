@@ -58,43 +58,44 @@ namespace TeknikServis.UI.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> YeniTalep(ServisTalebiDto model)
-        //{
-        //    if (!ModelState.IsValid)
-        //        return View(model);
+        [HttpPost]
+        public async Task<IActionResult> YeniTalep(ServisTalebi model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
 
-        //    model.TalepTarihi = DateTime.Now;
+            model.TalepTarihi = DateTime.Now;
 
-        //    var jsonData = JsonConvert.SerializeObject(model);
-        //    var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+            var jsonData = JsonConvert.SerializeObject(model);
+            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
-        //    var response = await _httpClient.PostAsync("https://localhost:44365/api/ServisTalebi", content);
+            var response = await _httpClient.PostAsync("https://localhost:44365/api/ServisTalebi", content);
 
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        ViewBag.Mesaj = "Servis talebiniz başarıyla oluşturuldu!";
-        //        return RedirectToAction("KendiTaleplerim");
-               
-        //    }
+            if (response.IsSuccessStatusCode)
+            {
+                ViewBag.Mesaj = "Servis talebiniz başarıyla oluşturuldu!";
+                return RedirectToAction("KendiTaleplerim");
 
-        //    var response2 = await _httpClient2.GetAsync("https://localhost:44365/api/Urun");
-        //    var urunler = new List<UrunDto>();
+            }
 
-        //    if (response2.IsSuccessStatusCode)
-        //    {
-        //        var json = await response2.Content.ReadAsStringAsync();
-        //        urunler = JsonConvert.DeserializeObject<List<UrunDto>>(json);
-        //    }
+            var response2 = await _httpClient2.GetAsync("https://localhost:44365/api/Urun");
+            var urunler = new List<UrunDto>();
 
-        //    ViewData["Urunler"] = urunler.Select(u => new SelectListItem
-        //    {
-        //        Value = u.Id.ToString(),
-        //        Text = u.Ad
-        //    });
-        //    ViewBag.Mesaj = "Talep oluşturulurken hata oluştu!";
-        //    return View();
-        //}
+            if (response2.IsSuccessStatusCode)
+            {
+                var json = await response2.Content.ReadAsStringAsync();
+                urunler = JsonConvert.DeserializeObject<List<UrunDto>>(json);
+            }
+
+            ViewData["Urunler"] = urunler.Select(u => new SelectListItem
+            {
+                Value = u.Id.ToString(),
+                Text = u.Ad
+            });
+            ViewBag.Mesaj = "Talep oluşturulurken hata oluştu!";
+            ViewBag.Kategoriler = EnumHelper.GetEnumDescriptions<Kategori>();
+            return View();
+        }
 
         [HttpPost]
         public async Task<IActionResult> Sil(int id)

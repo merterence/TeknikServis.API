@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace TeknikServis.API.Models
@@ -29,5 +30,7 @@ namespace TeknikServis.API.Models
         public bool Durum { get; set; } = false; // false = Bekliyor, true = Çözüldü
 
         public virtual Kullanici? Kullanici { get; set; }
+        [ValidateNever]
+        public List<string>? TalepResimleri { get; set; }
     }
 }

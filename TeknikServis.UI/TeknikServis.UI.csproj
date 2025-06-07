@@ -15,4 +15,8 @@
     <ProjectReference Include="..\TeknikServis.DTO\TeknikServis.DTO.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\img\talep_resim\" />
+  </ItemGroup>
+
 </Project>

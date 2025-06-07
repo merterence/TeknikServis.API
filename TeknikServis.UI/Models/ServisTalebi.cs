@@ -1,30 +1,34 @@
-﻿using TeknikServis.DTO;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
+using TeknikServis.DTO;
 using TeknikServis.UI.Models.dto;
 
 namespace TeknikServis.UI.Models
 {
     public class ServisTalebi
     {
-        public int Id { get; set; }  // ID otomatik atanmalı, bu yüzden formda göndermeyeceğiz
+        public int Id { get; set; }
 
-        public string? UrunAdi { get; set; }
 
-        public int UrunId { get; set; }
+        public int KullaniciId { get; set; }
 
-        public string? Aciklama { get; set; }
+        public int? UrunId { get; set; }
 
-        public string? KullaniciAdi { get; set; }
+        public UrunDto? Urun { get; set; }
+        [ValidateNever]
+        public string UrunAdi { get; set; }
 
-        public string? AdSoyad { get; set; }  // Session’dan otomatik alınan isim
+        public string Aciklama { get; set; }
 
-        public string? Email { get; set; }    // Giriş yapan kullanıcının emaili
 
-        public string? Adres { get; set; }    // İleride kullanıcıdan alınacak
+        public string TalepDurumu { get; set; } = "Oluşturuldu";
 
-        public string? TalepDurumu { get; set; } = "Oluşturuldu";  // Varsayılan
+        public DateTime TalepTarihi { get; set; } = DateTime.Now;
 
-        Deneme Deneme { get; set; } = new Deneme(); // Örnek DTO, ileride kullanılabilir
+        public bool Durum { get; set; } = false; // false = Bekliyor, true = Çözüldü
 
         public virtual Kullanici? Kullanici { get; set; }
+
+        public List<string> TalepResimleri { get; set; }
     }
 }

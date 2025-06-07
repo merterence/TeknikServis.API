@@ -5,6 +5,7 @@ using TeknikServis.API.Models.Dto;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TeknikServis.API.Services;
 
 namespace TeknikServis.API.Controllers
 {
@@ -109,7 +110,8 @@ namespace TeknikServis.API.Controllers
                 UrunId = dto.UrunId,
                 Aciklama = dto.Aciklama,
                 TalepDurumu = dto.TalepDurumu ?? "Oluşturuldu",
-                TalepTarihi = dto.TalepTarihi ?? DateTime.Now
+                TalepTarihi = dto.TalepTarihi ?? DateTime.Now,
+                TalepResimleri = dto.TalepResimleri ?? new List<string>()
             };
 
             Console.WriteLine("=== [API] Yeni Servis Talebi Geldi ===");
@@ -120,6 +122,14 @@ namespace TeknikServis.API.Controllers
 
             _context.ServisTalepleri.Add(talep);
             await _context.SaveChangesAsync();
+
+            Kullanici kullanici = await _context.Kullanicilar.FindAsync(kullaniciId);
+            Urun urun = await _context.Urunler.FindAsync(talep.UrunId);
+
+            EmailService emailService = new EmailService();
+            emailService.SendEmailAsync(kullanici.Email, "Yeni Servis Talebi", "<html><body style='background-color:lightblue;'><b>Ürün Adı : </b>" + urun.Ad + "<br><b> Açıklama : </b> " + talep.Aciklama + "</body></html>");
+         
+         
 
             return CreatedAtAction(nameof(GetTalep), new { id = talep.Id }, talep);
         }
