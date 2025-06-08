@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace TeknikServis.DTO
 {
-    public class Deneme
+    public class KullaniciDto
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
     }
 }

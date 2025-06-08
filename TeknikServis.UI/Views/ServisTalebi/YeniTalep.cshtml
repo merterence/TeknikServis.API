@@ -1,4 +1,4 @@
-﻿@model TeknikServis.UI.Models.ServisTalebi
+﻿@* @model TeknikServis.UI.Models.dto.ServisTalebiDto *@
 
 @{
     ViewData["Title"] = "Teknik Servis Talebi";
@@ -7,7 +7,7 @@
 
 <h2 class ="mb-4 text-center text-info">Teknik Servis Talebi Oluştur</h2>
 
-<form id="talepForm" asp-action="YeniTalep" enctype="multipart/form-data">
+<form id="talepForm" asp-action="YeniTalep" enctype="multipart/form-data" method="post">
 
    
     <div class="form-group">
@@ -24,7 +24,7 @@
 
     <div class="form-group">
         <label for="urunAdi">Ürün Adı</label>
-        <select asp-for="UrunId" name="UrunId" id="UrunId" class="form-control">
+        <select  name="UrunId" id="UrunId" class="form-control">
             <option>Önce Kategori Seçiniz</option>
         </select>
     </div>
@@ -41,8 +41,8 @@
 
     <input type="hidden" id="kullaniciIdInput" value="@kullaniciId" />
 
- @*    <input type="submit" value="Gönder" class="btn btn-primary btn-sm rounded shadow-sm px-3 mt-3" /> *@
-    <button type="button" onclick="talepGonder()" class="btn btn-primary btn-sm rounded shadow-sm px-3">Gönder</button>  
+    <input type="submit" value="Gönder" class="btn btn-primary btn-sm rounded shadow-sm px-3 mt-3" />
+    @* <button type="button" onclick="talepGonder()" class="btn btn-primary btn-sm rounded shadow-sm px-3">Gönder</button>   *@
 </form>
 
 <script>

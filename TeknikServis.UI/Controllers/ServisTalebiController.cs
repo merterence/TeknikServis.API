@@ -36,7 +36,7 @@ namespace TeknikServis.UI.Controllers
 
             return Json(urunler.Where(u => u.Kategorisi == (Kategori)id));
         }
-
+        [HttpGet]
         public async Task<IActionResult> YeniTalep()
         {
             
@@ -59,12 +59,42 @@ namespace TeknikServis.UI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> YeniTalep(ServisTalebi model)
+        public async Task<IActionResult> YeniTalep(ServisTalebiDto model, List<IFormFile> TalepResimleri)
         {
             if (!ModelState.IsValid)
-                return View(model);
+            {
+                ViewBag.Kategoriler = EnumHelper.GetEnumDescriptions<Kategori>();
+
+                var ad = HttpContext.Session.GetString("adSoyad");
+                var email = HttpContext.Session.GetString("email");
+                return View();
+            }
+                
+
+            if(TalepResimleri != null && TalepResimleri.Count > 0)
+            {
+                foreach(var resim in TalepResimleri)
+                {
+                    var upload = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/talep_resim");
+
+                    var extension = Path.GetExtension(resim.FileName); //resim.png
+                    var fileName = Guid.NewGuid().ToString() + extension; //dslfdslkfhsıy42r40389753.png
+                    var filePath = Path.Combine(upload, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await resim.CopyToAsync(stream);
+                    }
+
+                    model.TalepResimleri.Add(fileName);
+
+                }
+            }
+
 
             model.TalepTarihi = DateTime.Now;
+
+            model.KullaniciId = HttpContext.Session.GetInt32("kullaniciId").Value;
 
             var jsonData = JsonConvert.SerializeObject(model);
             var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
@@ -112,7 +142,7 @@ namespace TeknikServis.UI.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
-
+        [HttpGet]
         // ✅ Kullanıcının sadece kendi taleplerini gösteren kısım
         public async Task<IActionResult> KendiTaleplerim()
         {

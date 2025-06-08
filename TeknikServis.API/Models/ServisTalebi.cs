@@ -16,8 +16,7 @@ namespace TeknikServis.API.Models
 
         public Urun? Urun { get; set; }
 
-        [Required]
-        public string UrunAdi { get; set; }
+        public string? UrunAdi { get; set; }
 
         [Required]
         public string Aciklama { get; set; }

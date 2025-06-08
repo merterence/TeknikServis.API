@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TeknikServis.UI.Models;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using TeknikServis.UI.Models.dto;
+using TeknikServis.DTO;
 using Newtonsoft.Json;
 
 namespace TeknikServis.UI.Controllers;

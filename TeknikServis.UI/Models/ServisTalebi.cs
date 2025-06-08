@@ -29,6 +29,6 @@ namespace TeknikServis.UI.Models
 
         public virtual Kullanici? Kullanici { get; set; }
 
-        public List<string> TalepResimleri { get; set; }
+        public List<string> TalepResimleri { get; set; } = new List<string>();
     }
 }

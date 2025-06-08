@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TeknikServis.API.Models;
-using TeknikServis.API.Models.Dto;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TeknikServis.API.Services;
+using TeknikServis.DTO;
 
 namespace TeknikServis.API.Controllers
 {
@@ -96,16 +96,16 @@ namespace TeknikServis.API.Controllers
         public async Task<ActionResult<ServisTalebi>> PostTalep([FromBody] ServisTalebiDto dto)
         {
             // ❗️KullaniciId'yi dışarıdan değil, oturumdan al
-            var kullaniciIdHeader = HttpContext.Request.Headers["kullaniciId"].FirstOrDefault();
+            //var kullaniciIdHeader = HttpContext.Request.Headers["kullaniciId"].FirstOrDefault();
 
-            if (!int.TryParse(kullaniciIdHeader, out int kullaniciId))
-            {
-                return BadRequest("Geçerli bir kullanıcı oturumu bulunamadı.");
-            }
+            //if (!int.TryParse(kullaniciIdHeader, out int kullaniciId))
+            //{
+            //    return BadRequest("Geçerli bir kullanıcı oturumu bulunamadı.");
+            //}
 
             var talep = new ServisTalebi
             {
-                KullaniciId = kullaniciId,
+                KullaniciId = dto.KullaniciId,
                 UrunAdi = dto.UrunAdi,
                 UrunId = dto.UrunId,
                 Aciklama = dto.Aciklama,
@@ -123,7 +123,7 @@ namespace TeknikServis.API.Controllers
             _context.ServisTalepleri.Add(talep);
             await _context.SaveChangesAsync();
 
-            Kullanici kullanici = await _context.Kullanicilar.FindAsync(kullaniciId);
+            Kullanici kullanici = await _context.Kullanicilar.FindAsync(dto.KullaniciId);
             Urun urun = await _context.Urunler.FindAsync(talep.UrunId);
 
             EmailService emailService = new EmailService();
