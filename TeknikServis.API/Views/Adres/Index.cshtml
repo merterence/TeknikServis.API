@@ -1,0 +1,65 @@
+﻿@model IEnumerable<TeknikServis.API.Models.Adres>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Kullanici)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sehir)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ilce)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Mahalle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sokak)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.No)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kullanici.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sehir)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ilce)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Mahalle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sokak)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.No)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.KullaniciId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.KullaniciId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.KullaniciId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -7,6 +7,8 @@ using System.Text;
 using TeknikServis.UI.Models.dto;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using TeknikServis.DTO;
+using System.Reflection;
 
 namespace TeknikServis.UI.Controllers
 {
@@ -27,12 +29,84 @@ namespace TeknikServis.UI.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Guncelle([Bind("AdSoyad,AdresDto")] KullaniciDto kullaniciDto)
+        {
+            kullaniciDto.Id = HttpContext.Session.GetInt32("kullaniciId").Value;
+
+            if (ModelState.IsValid)
+            {
+
+                var jsonData = JsonConvert.SerializeObject(kullaniciDto);
+                var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.PutAsync("https://localhost:44365/api/Kullanici", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("Profil");
+
+                }
+
+            }
+            return View();
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Guncelle()
+        {
+
+            int id = HttpContext.Session.GetInt32("kullaniciId").Value;
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var response = await _httpClient.GetAsync("https://localhost:44365/api/Kullanici/" + id);
+
+            KullaniciDto dto = null;
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                dto = JsonConvert.DeserializeObject<KullaniciDto>(json);
+            }
+
+            return View(dto);
+        }
+
         [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Login()
         {
             return View();
         }
+
+        [HttpGet]
+        [ActionName("Profil")]
+        public async Task<IActionResult> Profil()
+        {
+            int id = HttpContext.Session.GetInt32("kullaniciId").Value;
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var response = await _httpClient.GetAsync("https://localhost:44365/api/Kullanici/" + id);
+
+            KullaniciDto dto = null;
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                dto = JsonConvert.DeserializeObject<KullaniciDto>(json);
+            }
+
+            return View(dto);
+        }
+
 
         [AllowAnonymous]
         [HttpPost]
@@ -53,8 +127,8 @@ namespace TeknikServis.UI.Controllers
                 {
                     var response = await httpClient.PostAsync(url, content);
 
-                    Kullanici kullanici = response.IsSuccessStatusCode
-                ? JsonConvert.DeserializeObject<Kullanici>(await response.Content.ReadAsStringAsync())
+                    KullaniciDto kullaniciDto = response.IsSuccessStatusCode
+                ? JsonConvert.DeserializeObject<KullaniciDto>(await response.Content.ReadAsStringAsync())
                 : null;
 
                     if (!response.IsSuccessStatusCode)
@@ -63,14 +137,13 @@ namespace TeknikServis.UI.Controllers
                         return View();
                     }
 
-
                     // Session’a kullanıcı bilgilerini kaydet
-                    HttpContext.Session.SetString("adSoyad", kullanici.AdSoyad ?? "");
-                    HttpContext.Session.SetString("email", kullanici.Email ?? "");
-                    HttpContext.Session.SetInt32("kullaniciId", kullanici.Id); // ➡️ Kullanıcı ID bilgisini de Session'a kaydediyoruz
+                    HttpContext.Session.SetString("adSoyad", kullaniciDto.AdSoyad ?? "");
+                    HttpContext.Session.SetString("email", kullaniciDto.Email ?? "");
+                    HttpContext.Session.SetInt32("kullaniciId", kullaniciDto.Id); // ➡️ Kullanıcı ID bilgisini de Session'a kaydediyoruz
 
                     // ✅ 4. Başarılı giriş olursa LocalStorage'a ID aktaracağız (Login.cshtml dosyasında)
-                    TempData["kullaniciId"] = kullanici.Id;
+                    TempData["kullaniciId"] = kullaniciDto.Id;
                 }catch(Exception ex)
                 {
 

@@ -18,6 +18,7 @@
                 <th>Açıklama</th>
                 <th>Talep Durumu</th>
                 <th>Talep Tarihi</th>
+                <th>Detay</th>
                 <th>Sil</th>
 
             </tr>
@@ -25,12 +26,15 @@
         <tbody>
             @foreach (var talep in Model)
             {
+               
                 <tr>
                     <td>@talep.Urun.Ad</td>
                     <td>@talep.Aciklama</td>
                     <td>@talep.TalepDurumu</td>
                     <td>@talep.TalepTarihi?.ToString("dd.MM.yyyy HH:mm")</td>
-
+                    <td>
+                        <a class="btn btn-primary" asp-action="TalepDetay" asp-route-id="@talep.Id">Detay</a>
+                    </td>
                     <td>
                         <form asp-controller="ServisTalebi" asp-action="Sil" method="post">
                             <input type="hidden" name="id" value="@talep.Id" />
@@ -39,6 +43,7 @@
                     </td>
 
                 </tr>
+              
             }
         </tbody>
     </table>

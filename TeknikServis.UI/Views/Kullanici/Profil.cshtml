@@ -1,0 +1,36 @@
+﻿@model TeknikServis.DTO.KullaniciDto
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+
+<div>
+    <h4>Profil</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.AdSoyad)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.AdSoyad)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+   
+        <dt class = "col-sm-2">
+          Adres
+        </dt>
+        <dd class = "col-sm-10">
+                @Model.AdresDto.Mahalle ,  @Model.AdresDto.Sokak ,  @Model.AdresDto.No ,  @Model.AdresDto.Sehir /  @Model.AdresDto.Ilce
+        </dd>
+
+    </dl>
+</div>
+<div>
+    <a asp-action="Guncelle">Güncelle</a> 
+</div>

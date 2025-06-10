@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using System.Drawing;
 using TeknikServis.API.Models;
 using TeknikServis.API.Models.Dto;
+using TeknikServis.DTO;
 
 namespace TeknikServis.API.Controllers
 {
@@ -14,6 +17,76 @@ namespace TeknikServis.API.Controllers
         public KullaniciController(AppDbContext context)
         {
             _context = context;
+        }
+
+
+        [HttpPut]
+        public async Task<IActionResult> Guncelle([FromBody] KullaniciDto dto)
+        {
+
+            var mevcut = _context.Kullanicilar.Include(k=>k.Adres).FirstOrDefault(x => x.Id == dto.Id);
+            if (mevcut == null)
+            {
+                return NotFound();
+            }
+
+
+            mevcut.AdSoyad = dto.AdSoyad;
+            mevcut.Adres.Sehir = dto.AdresDto.Sehir;
+            mevcut.Adres.Ilce = dto.AdresDto.Ilce;
+            mevcut.Adres.Mahalle = dto.AdresDto.Mahalle;
+            mevcut.Adres.Sokak = dto.AdresDto.Sokak;
+            mevcut.Adres.No = dto.AdresDto.No;
+
+            try
+            {
+                _context.Kullanicilar.Update(mevcut);
+                _context.SaveChanges();
+            }catch(Exception ex)
+            {
+
+            }
+          
+
+            // ✅ JSON formatında cevap dönülüyor
+            return Ok();
+        }
+
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<KullaniciDto>> GetKullaniciById([FromRoute]int id)
+        {
+            var kullanici = await _context.Kullanicilar.Include(k=>k.Adres)
+               .FirstOrDefaultAsync(x => x.Id == id);
+            if (kullanici == null)
+            {
+                return NotFound();
+            }
+            // ✅ JSON formatında cevap dönülüyor
+
+
+            AdresDto adresDto = null;
+            if(kullanici.Adres != null)
+            {
+                adresDto = new AdresDto
+                {
+                    Sehir = kullanici.Adres.Sehir,
+                    Ilce = kullanici.Adres.Ilce,
+                    Mahalle = kullanici.Adres.Mahalle,
+                    Sokak = kullanici.Adres.Sokak,
+                    No = kullanici.Adres.No
+                };
+            }
+          
+
+            KullaniciDto kullaniciDto = new KullaniciDto
+            {
+                Id = kullanici.Id,
+                AdSoyad = kullanici.AdSoyad,
+                AdresDto = adresDto,
+                Email = kullanici.Email
+            };
+            return Ok(kullaniciDto);
         }
 
         [HttpPost]
@@ -50,22 +123,24 @@ namespace TeknikServis.API.Controllers
             });
         }
 
+
+
         [HttpPost("login")]
-        public async Task<ActionResult<Kullanici>> Login([FromForm]string email,[FromForm] string sifre)
+        public async Task<ActionResult<KullaniciDto>> Login([FromForm]string email,[FromForm] string sifre)
         {
    
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(sifre))
             {
                 return BadRequest("Email ve şifre boş bırakılamaz.");
             }
-            var kullanici = await _context.Kullanicilar
+            var kullaniciDto = await _context.Kullanicilar
                 .FirstOrDefaultAsync(x => x.Email == email && x.Sifre == sifre);
-            if (kullanici == null)
+            if (kullaniciDto == null)
             {
                 return Unauthorized("Email veya şifre hatalı.");
             }
             // ✅ JSON formatında cevap dönülüyor
-            return Ok(kullanici);
+            return Ok(kullaniciDto);
         }
 
     }

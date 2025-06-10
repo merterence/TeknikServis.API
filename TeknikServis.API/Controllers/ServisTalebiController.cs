@@ -76,6 +76,7 @@ namespace TeknikServis.API.Controllers
                 Aciklama = t.Aciklama,
                 TalepDurumu = t.TalepDurumu,
                 TalepTarihi = t.TalepTarihi
+              
             }).ToList();
 
             return Ok(dtoList);
@@ -86,8 +87,20 @@ namespace TeknikServis.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ServisTalebi>> GetTalep(int id)
         {
-            var talep = await _context.ServisTalepleri.FindAsync(id);
+            var talep = await _context.ServisTalepleri.Include(s => s.Urun).FirstOrDefaultAsync(s => s.Id == id);
             if (talep == null) return NotFound();
+
+            ServisTalebiDto dto = new ServisTalebiDto
+            {
+                KullaniciId = talep.KullaniciId,
+                UrunAdi = talep.UrunAdi,
+                UrunId = talep.UrunId,
+                Aciklama = talep.Aciklama,
+                TalepDurumu = talep.TalepDurumu,
+                TalepTarihi = talep.TalepTarihi,
+                TalepResimleri = talep.TalepResimleri ?? new List<string>()
+            };
+
             return talep;
         }
 

@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Http;
 using TeknikServis.DTO;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using TeknikServis.UI.Helper;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
+using System.Reflection;
 
 namespace TeknikServis.UI.Controllers
 {
@@ -21,6 +23,23 @@ namespace TeknikServis.UI.Controllers
         {
             _httpClient = new HttpClient();
             _httpClient2 = new HttpClient();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> TalepDetay(int id)
+        {
+
+            var response = await _httpClient.GetAsync("https://localhost:44365/api/ServisTalebi/"+id);
+
+            ServisTalebiDto dto = null;
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                dto = JsonConvert.DeserializeObject<ServisTalebiDto>(json);
+            }
+
+            return View(dto);
         }
 
         [HttpGet]
