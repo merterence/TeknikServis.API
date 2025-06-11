@@ -1,4 +1,6 @@
-﻿namespace TeknikServis.API.Models
+﻿using TeknikServis.DTO;
+
+namespace TeknikServis.API.Models
 {
     public class Urun
     {

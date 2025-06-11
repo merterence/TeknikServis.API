@@ -21,12 +21,17 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Email)
-   
-        <dt class = "col-sm-2">
-          Adres
-        </dt>
-        <dd class = "col-sm-10">
-                @Model.AdresDto.Mahalle ,  @Model.AdresDto.Sokak ,  @Model.AdresDto.No ,  @Model.AdresDto.Sehir /  @Model.AdresDto.Ilce
+
+            <dt class = "col-sm-2">
+                Adres
+            </dt>
+            <dd class = "col-sm-10">
+                @if(Model.AdresDto != null)
+                {
+                    <span>@Model.AdresDto.Mahalle
+ ,  @Model.AdresDto.Sokak ,  @Model.AdresDto.No ,  @Model.AdresDto.Sehir / @Model.AdresDto.Ilce</span>
+                }
+              
         </dd>
 
     </dl>

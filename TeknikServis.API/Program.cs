@@ -1,20 +1,27 @@
 using Microsoft.EntityFrameworkCore;
+using TeknikServis.API.Controllers;
 using TeknikServis.API.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+
+
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        policy =>
-        {
-            policy.AllowAnyOrigin()
-                  .AllowAnyMethod()
-                  .AllowAnyHeader();
-        });
+    options.AddPolicy("AllowMvcApp", policy =>
+    {
+        policy.WithOrigins("https://localhost:7175") // MVC projesi adresi
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials(); // SignalR için gerekli
+    });
 });
+
+
+builder.Services.AddSignalR();
 
 // Add services to the container.
 
@@ -38,14 +45,19 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+
 app.UseHttpsRedirection();
 
-app.UseCors("AllowAll");
+app.UseRouting();
+
+app.UseCors("AllowMvcApp");
 
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<NotificationHub>("/hub/notification").RequireCors("AllowMvcApp");
 
 app.Run();
 

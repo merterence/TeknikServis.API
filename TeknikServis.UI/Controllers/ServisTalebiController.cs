@@ -181,12 +181,20 @@ namespace TeknikServis.UI.Controllers
                 var json = await response.Content.ReadAsStringAsync();
                 var tumTalepler = JsonConvert.DeserializeObject<List<ServisTalebiDto>>(json);
 
-                kullaniciTalepleri = tumTalepler
-                     .Where(t => t.KullaniciId == kullaniciId.Value)
-                    .ToList();
+                if (HttpContext.Session.GetInt32("isAdmin") == 0)
+                {
+                    kullaniciTalepleri = tumTalepler
+                         .Where(t => t.KullaniciId == kullaniciId.Value)
+                        .ToList();
+                }
+                else
+                {
+                    kullaniciTalepleri = tumTalepler;
+                }
+
             }
 
-            return View(kullaniciTalepleri);
+            return View(kullaniciTalepleri.OrderByDescending(t=>t.TalepTarihi).ToList());
         }
     }
 }

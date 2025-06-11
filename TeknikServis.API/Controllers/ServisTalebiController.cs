@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TeknikServis.API.Services;
 using TeknikServis.DTO;
+using Microsoft.AspNetCore.SignalR;
 
 namespace TeknikServis.API.Controllers
 {
@@ -14,10 +15,13 @@ namespace TeknikServis.API.Controllers
     public class ServisTalebiController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IHubContext<NotificationHub> _hubContext;
 
-        public ServisTalebiController(AppDbContext context)
+        public ServisTalebiController(AppDbContext context, IHubContext<NotificationHub> hubContext)
         {
             _context = context;
+            _hubContext = hubContext;
+
         }
 
         // 1️⃣ Tüm talepleri getir
@@ -141,8 +145,16 @@ namespace TeknikServis.API.Controllers
 
             EmailService emailService = new EmailService();
             emailService.SendEmailAsync(kullanici.Email, "Yeni Servis Talebi", "<html><body style='background-color:lightblue;'><b>Ürün Adı : </b>" + urun.Ad + "<br><b> Açıklama : </b> " + talep.Aciklama + "</body></html>");
-         
-         
+
+            try
+            {
+                await _hubContext.Clients.All.SendAsync("YeniTalep", "YeniTalepEklendi");
+            }
+            catch (Exception ex)
+            {
+
+            }
+           
 
             return CreatedAtAction(nameof(GetTalep), new { id = talep.Id }, talep);
         }

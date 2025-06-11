@@ -138,6 +138,7 @@ namespace TeknikServis.UI.Controllers
                     }
 
                     // Session’a kullanıcı bilgilerini kaydet
+                    HttpContext.Session.SetInt32("isAdmin", kullaniciDto.IsAdmin ? 1 : 0);
                     HttpContext.Session.SetString("adSoyad", kullaniciDto.AdSoyad ?? "");
                     HttpContext.Session.SetString("email", kullaniciDto.Email ?? "");
                     HttpContext.Session.SetInt32("kullaniciId", kullaniciDto.Id); // ➡️ Kullanıcı ID bilgisini de Session'a kaydediyoruz

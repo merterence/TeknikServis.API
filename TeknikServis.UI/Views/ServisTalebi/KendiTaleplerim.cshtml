@@ -52,3 +52,27 @@ else
 {
     <div class="alert alert-warning">Henüz bir servis talebiniz bulunmamaktadır.</div>
 }
+<!-- SignalR client kütüphanesi -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+
+
+<script>
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("https://localhost:44365/hub/notification", {
+            withCredentials: true
+        })
+        .build();
+
+    connection.on("YeniTalep", function (message) {
+
+       if(message === "YeniTalepEklendi"){
+            location.reload();
+       }
+    });
+
+    connection.start().catch(function (err) {
+        console.error("SignalR bağlantı hatası:", err);
+    });
+</script>
+
+<div id="talepListesi"></div>

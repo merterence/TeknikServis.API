@@ -24,7 +24,7 @@ namespace TeknikServis.API.Controllers
         public async Task<IActionResult> Guncelle([FromBody] KullaniciDto dto)
         {
 
-            var mevcut = _context.Kullanicilar.Include(k=>k.Adres).FirstOrDefault(x => x.Id == dto.Id);
+            var mevcut = _context.Kullanicilar.Include(k => k.Adres).FirstOrDefault(x => x.Id == dto.Id);
             if (mevcut == null)
             {
                 return NotFound();
@@ -32,11 +32,27 @@ namespace TeknikServis.API.Controllers
 
 
             mevcut.AdSoyad = dto.AdSoyad;
-            mevcut.Adres.Sehir = dto.AdresDto.Sehir;
-            mevcut.Adres.Ilce = dto.AdresDto.Ilce;
-            mevcut.Adres.Mahalle = dto.AdresDto.Mahalle;
-            mevcut.Adres.Sokak = dto.AdresDto.Sokak;
-            mevcut.Adres.No = dto.AdresDto.No;
+            if (mevcut.Adres != null)
+            {
+                mevcut.Adres.Sehir = dto.AdresDto.Sehir;
+                mevcut.Adres.Ilce = dto.AdresDto.Ilce;
+                mevcut.Adres.Mahalle = dto.AdresDto.Mahalle;
+                mevcut.Adres.Sokak = dto.AdresDto.Sokak;
+                mevcut.Adres.No = dto.AdresDto.No;
+            }
+            else
+            {
+            
+            mevcut.Adres = new Adres
+            {
+                Sehir = dto.AdresDto.Sehir,
+                Ilce = dto.AdresDto.Ilce,
+                Mahalle = dto.AdresDto.Mahalle,
+                Sokak = dto.AdresDto.Sokak,
+                No = dto.AdresDto.No
+            };
+            }
+            
 
             try
             {

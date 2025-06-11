@@ -88,12 +88,12 @@
             <form id="login-form" asp-area="" asp-controller="Kullanici" asp-action="Login" method="post">
                 <div class="mb-3">
                     <label class="form-label" for="email">E-Posta</label>
-                    <input type="email" class="form-control" name="email" id="email">
+                    <input type="email" class="form-control" name="email" id="eposta">
                 </div>
                 <label class="form-label" for="sifre">Şifre</label>
                 <div class="mb-3 input-group">
                    
-                    <input type="password" name="sifre" class="form-control sifre1" id="sifre">
+                    <input type="password" name="sifre" class="form-control sifre1" id="password">
                     <span class="input-group-text eye-icon" onclick="togglePassword();"><i class="bi bi-eye"></i></span>
                 </div>
 
@@ -218,7 +218,7 @@
 
 <script>
     function togglePassword() {
-      const passwordInput =  document.getElementById("sifre");
+      const passwordInput =  document.getElementById("password");
       const icon = document.querySelector(".eye-icon");
 
       if (passwordInput.type === "password") {
