@@ -27,7 +27,7 @@ namespace TeknikServis.UI.Controllers
                 urunler = JsonConvert.DeserializeObject<List<UrunDto>>(json);
             }
 
-            return View(urunler);
+            return View(urunler.OrderByDescending(u=>u.Id).ToList());
         }
 
         [HttpPost]

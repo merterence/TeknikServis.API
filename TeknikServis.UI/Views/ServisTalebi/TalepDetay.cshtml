@@ -36,20 +36,47 @@
             @Html.DisplayFor(model => model.TalepTarihi)
         </dd>
 
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Urun.MinServisUcreti)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Urun.MinServisUcreti)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Urun.MaxServisUcreti)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Urun.MaxServisUcreti)
+        </dd>
+
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.TalepResimleri)
         </dt>
         <dd class = "col-sm-10">
-            @foreach (string resim in Model.TalepResimleri)
+            @if (Model.TalepResimleri != null && Model.TalepResimleri.Count > 0)
             {
-                <div class="preview-container">
-                    <img class="thumbnail" style="width:100px;height:80px" src="~/img/talep_resim/@resim" />
+                foreach (string resim in Model.TalepResimleri)
+                {
+                    if (resim != null && resim != "") {
+                        <div class="preview-container">
+                            <img class="thumbnail" style="width:100px;height:80px" src="~/img/talep_resim/@resim" />
 
-                    <div class="preview">
-                        <img class="thumbnail" style="width:500px;height:450px" src="~/img/talep_resim/@resim" />
+                        <div class="preview">
+                            <img class="thumbnail" style="width:500px;height:450px" src="~/img/talep_resim/@resim" />
 
+                        </div>
                     </div>
-                </div>
+                    }
+                    else
+                    {
+                        <p>Resim yüklenmemiş.</p>
+                    }
+                }
+            }
+            else
+            {
+                <p>Resim yüklenmemiş.</p>
             }
         </dd>
     </dl>

@@ -36,9 +36,17 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="ServisTalebi" asp-action="KendiTaleplerim">Taleplerim</a>
                             </li>
+                            @if (Context.Session.GetInt32("isAdmin") == 1)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Urun" asp-action="Index">Ürünler</a>
+                                </li>
+                            }
+
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Urun" asp-action="Index">Ürünler</a>
+                                <a class="nav-link text-dark" asp-controller="Randevu" asp-action="Index">Randevular</a>
                             </li>
+                        
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="Kullanici" asp-action="Profil">Profil</a>
                             </li>

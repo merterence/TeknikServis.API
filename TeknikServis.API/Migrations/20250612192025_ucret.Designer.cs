@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TeknikServis.API.Models;
 
@@ -11,9 +12,11 @@ using TeknikServis.API.Models;
 namespace TeknikServis.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250612192025_ucret")]
+    partial class ucret
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,30 +81,6 @@ namespace TeknikServis.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Kullanicilar");
-                });
-
-            modelBuilder.Entity("TeknikServis.API.Models.Randevu", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("RandevuDurumu")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ServisTalebiId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Tarihi")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ServisTalebiId");
-
-                    b.ToTable("Randevular");
                 });
 
             modelBuilder.Entity("TeknikServis.API.Models.ServisTalebi", b =>
@@ -190,17 +169,6 @@ namespace TeknikServis.API.Migrations
                     b.Navigation("Kullanici");
                 });
 
-            modelBuilder.Entity("TeknikServis.API.Models.Randevu", b =>
-                {
-                    b.HasOne("TeknikServis.API.Models.ServisTalebi", "ServisTalebi")
-                        .WithMany("Randevular")
-                        .HasForeignKey("ServisTalebiId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ServisTalebi");
-                });
-
             modelBuilder.Entity("TeknikServis.API.Models.ServisTalebi", b =>
                 {
                     b.HasOne("TeknikServis.API.Models.Kullanici", "Kullanici")
@@ -223,11 +191,6 @@ namespace TeknikServis.API.Migrations
                     b.Navigation("Adres");
 
                     b.Navigation("ServisTalepleri");
-                });
-
-            modelBuilder.Entity("TeknikServis.API.Models.ServisTalebi", b =>
-                {
-                    b.Navigation("Randevular");
                 });
 #pragma warning restore 612, 618
         }

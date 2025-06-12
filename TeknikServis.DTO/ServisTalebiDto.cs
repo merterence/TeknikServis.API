@@ -1,4 +1,6 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
+
 namespace TeknikServis.DTO
 {
   
@@ -16,7 +18,7 @@ namespace TeknikServis.DTO
 
         public string? UrunAdi { get; set; }
 
-
+        [StringLength(500, MinimumLength =20, ErrorMessage="En az 20 en fazla 500 karakter giriniz.")]
         public string Aciklama { get; set; }
 
 

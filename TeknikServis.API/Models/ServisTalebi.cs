@@ -31,5 +31,7 @@ namespace TeknikServis.API.Models
         public virtual Kullanici? Kullanici { get; set; }
         [ValidateNever]
         public List<string>? TalepResimleri { get; set; }
+        [ValidateNever]
+        public List<Randevu> Randevular { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using TeknikServis.DTO;
+﻿using Microsoft.EntityFrameworkCore;
+using TeknikServis.DTO;
 
 namespace TeknikServis.API.Models
 {
@@ -9,6 +10,10 @@ namespace TeknikServis.API.Models
         public Kategori Kategorisi { get; set; }
 
         public string Aciklama { get; set; }
- 
+        [Precision(18, 2)]
+        public decimal MinServisUcreti { get; set; }
+        [Precision(18, 2)] 
+        public decimal MaxServisUcreti { get; set; }
+
     }
 }

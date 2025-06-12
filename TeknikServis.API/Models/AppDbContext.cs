@@ -15,6 +15,8 @@ namespace TeknikServis.API.Models
 
         public DbSet<Adres> Adresler { get; set; } // Yeni eklenen tablo ✅
 
+        public DbSet<Randevu> Randevular { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ServisTalebi>()

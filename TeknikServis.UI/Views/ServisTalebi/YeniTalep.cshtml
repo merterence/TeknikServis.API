@@ -1,4 +1,4 @@
-﻿@* @model TeknikServis.UI.Models.dto.ServisTalebiDto *@
+﻿ @model TeknikServis.DTO.ServisTalebiDto
 
 @{
     ViewData["Title"] = "Teknik Servis Talebi";
@@ -7,7 +7,7 @@
 
 <h2 class ="mb-4 text-center text-info">Teknik Servis Talebi Oluştur</h2>
 
-<form id="talepForm" asp-action="YeniTalep" enctype="multipart/form-data" method="post">
+<form id="talepForm" asp-action="YeniTalep" asp- enctype="multipart/form-data" method="post">
 
    
     <div class="form-group">
@@ -27,11 +27,13 @@
         <select  name="UrunId" id="UrunId" class="form-control">
             <option>Önce Kategori Seçiniz</option>
         </select>
+     
     </div>
 
     <div class="form-group">
         <label for="aciklama">Açıklama</label>
-        <textarea class="form-control" id="aciklama" name="aciklama" required></textarea>
+        <textarea asp-for="Aciklama" class="form-control" id="aciklama" required></textarea>
+        <span asp-validation-for="Aciklama" class="text-danger"></span>
     </div>
 
     <div class="form-group">
@@ -71,7 +73,7 @@
             data.forEach(urun => {
                 const option = document.createElement("option");
                 option.value = urun.id;
-                option.textContent = urun.ad;
+                option.textContent = urun.ad + " (Min. Servis Ücreti :"+urun.minServisUcreti+" - Max. Servis Ücreti :"+urun.maxServisUcreti+")";
                 urunListesi.appendChild(option);
             });
             })
