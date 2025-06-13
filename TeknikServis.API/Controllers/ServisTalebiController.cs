@@ -31,6 +31,7 @@ namespace TeknikServis.API.Controllers
             return await _context.ServisTalepleri
                 .Include(t => t.Kullanici) // Kullanıcı bilgilerini de getiriyoruz
                 .Include(t => t.Urun)
+                .Include(t=>t.Randevular)
                 .ToListAsync();
         }
 
@@ -61,6 +62,7 @@ namespace TeknikServis.API.Controllers
             var talepler = await _context.ServisTalepleri
                 .Where(t => t.KullaniciId == id)
                 .Include(t => t.Kullanici)
+                .Include(t=>t.Randevular)
                 .ToListAsync();
 
             return talepler;

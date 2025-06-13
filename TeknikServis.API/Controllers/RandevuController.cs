@@ -22,17 +22,47 @@ namespace TeknikServis.API.Controllers
         //    return await _context.Randevular.Include(r=>r.ServisTalebi).ThenInclude(s=>s.Kullanici).FirstOrDefaultAsync(r=>r.Id == id);
         //}
 
+        [HttpGet("tarihlerandevu")]
+        public async Task<ActionResult<RandevuDto>> GetRandevuByDate(DateTime tarih)
+        {
+            var randevular = await _context.Randevular.Where(r => r.Tarihi == tarih).Include(r => r.ServisTalebi).ThenInclude(s => s.Urun).Include(r => r.ServisTalebi.Kullanici).ToListAsync();
+            if(randevular!= null && randevular.Count == 1)
+            {
+                Randevu r = randevular[0];
+                RandevuDto dto = new RandevuDto
+                {
+                    ServisTalebiId = r.ServisTalebiId,
+                    ServisTalebi = new ServisTalebiDto
+                    {
+                        Id = r.ServisTalebiId,
+                        Kullanici = new KullaniciDto
+                        {
+                            AdSoyad = r.ServisTalebi.Kullanici.AdSoyad
+                        },
+                        Urun = new UrunDto
+                        {
+                            Ad = r.ServisTalebi.Urun.Ad
+                        }
+                    }
+
+                };
+                return dto;
+            }
+
+            return null;
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Randevu>>> GetRandevular()
         {
-            return await _context.Randevular.Include(r => r.ServisTalebi).ThenInclude(s => s.Kullanici).ToListAsync();
+            return await _context.Randevular.Include(r => r.ServisTalebi).ThenInclude(s=>s.Urun).Include(r=>r.ServisTalebi.Kullanici).ToListAsync();
         }
 
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Randevu>>> GetRandevularByKullaniciId(int kullaniciId)
-        //{
-        //    return await _context.Randevular.Where(r=> r.ServisTalebi.KullaniciId == kullaniciId).ToListAsync();
-        //}
+        [HttpGet("randevularByKullaniciId")]
+        public async Task<ActionResult<IEnumerable<Randevu>>> GetRandevularByKullaniciId(int id)
+        {
+            return await _context.Randevular.Include(r => r.ServisTalebi).ThenInclude(s => s.Urun).Include(r => r.ServisTalebi.Kullanici).Where(r => r.ServisTalebi.KullaniciId == id).ToListAsync();
+        }
 
 
         [HttpPost]

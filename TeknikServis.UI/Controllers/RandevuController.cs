@@ -22,7 +22,7 @@ namespace TeknikServis.UI.Controllers
 
             if (HttpContext.Session.GetInt32("isAdmin") == 0)
             {
-                servisAdresi += "/" + HttpContext.Session.GetInt32("kullaniciId").Value;
+                servisAdresi += "/randevularByKullaniciId?id=" + HttpContext.Session.GetInt32("kullaniciId").Value;
             }
 
             var response = await _httpClient.GetAsync(servisAdresi);
@@ -35,8 +35,11 @@ namespace TeknikServis.UI.Controllers
             return View(randevular);
         }
 
-        public async Task<IActionResult> Create(int id)
+        [HttpGet]
+        public async Task<IActionResult> Create(int id, string musteriAdi, String urunAdi)
         {
+            ViewBag.MusteriAdi =musteriAdi;
+            ViewBag.UrunAdi = urunAdi;
             ViewBag.ServisTalebiId = id;
             return View();
         }
@@ -44,6 +47,26 @@ namespace TeknikServis.UI.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(RandevuDto dto)
         {
+
+            string servisAdresi = $"api/Randevu/tarihlerandevu?tarih={Uri.EscapeDataString(dto.Tarihi.ToString("yyyy-MM-ddTHH:mm:ss"))}";
+
+          
+            var response1 = await _httpClient.GetAsync(servisAdresi);
+            if (!response1.IsSuccessStatusCode)
+                return View();
+
+            var json = await response1.Content.ReadAsStringAsync();
+            var randevu = JsonConvert.DeserializeObject<RandevuDto>(json);
+
+            if(randevu != null)
+            {
+                ViewBag.MusteriAdi = randevu.ServisTalebi.Kullanici.AdSoyad;
+                ViewBag.UrunAdi = randevu.ServisTalebi.Urun.Ad;
+                ViewBag.ServisTalebiId = randevu.ServisTalebiId;
+                ModelState.AddModelError("", "Bu tarihte zaten bir randevu var. Lütfen farklı bir tarih seçin.");
+                return View(dto);
+            }
+
             dto.RandevuDurumu = RandevuDurumu.PLANLANDI;
             var jsonData = JsonConvert.SerializeObject(dto);
             var content = new StringContent(jsonData, Encoding.UTF8, "application/json");

@@ -7,6 +7,7 @@
     <thead>
         <tr>
             <th>Müşteri</th>
+            <th>Ürün</th>
             <th>Servis Talebi No</th>
             <th>Tarih</th>
             <th>Durum</th>
@@ -18,8 +19,9 @@
         {
             <tr>
                 <td>@item.ServisTalebi.Kullanici.AdSoyad</td>
+                <td>@item.ServisTalebi.Urun.Ad</td>
                 <td>@item.ServisTalebiId</td>
-                <td>@item.Tarihi.ToString("yyyy-MM-dd")</td>
+                <td>@item.Tarihi.ToString("dd.MM.yyyy HH:mm")</td>
                 <td>@item.RandevuDurumu</td>
                 <td>
                     <a href="/Randevu/Edit/@item.Id" class="btn btn-sm btn-warning">Düzenle</a>

@@ -2,22 +2,50 @@
 
 @{
     var servisTalebiId = ViewBag.ServisTalebiId ?? 0;
+    var musteriAdi = ViewBag.MusteriAdi;
+    var urunAdi = ViewBag.UrunAdi;
 }
+
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/jquery-datetimepicker@2.5.20/jquery.datetimepicker.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/jquery-datetimepicker@2.5.20/build/jquery.datetimepicker.full.min.js"></script>
 <h2>Yeni Randevu Ekle</h2>
 
 <form asp-action="Create" method="post">
     <div class="form-group">
         <label>Servis Talebi No</label>
-        <label class="form-control">@servisTalebiId</label>
+        <label>@servisTalebiId</label>
         <input type="hidden" value="@servisTalebiId" id="ServisTalebiId" name="ServisTalebiId"/>
     </div>
-
+    <hr />
     <div class="form-group">
-        <label>Randevu Tarihi</label>
-        <input asp-for="Tarihi" type="date" class="form-control" />
+        <label>Müşteri Adı</label>
+        <label>@musteriAdi</label>
+       
     </div>
+    <hr />
+    <div class="form-group">
+        <label>Ürün Adı</label>
+        <label>@urunAdi</label>
 
-    
+    </div>
+<div class="form-group">
+    <label>Randevu Tarihi</label>
+    <input asp-for="Tarihi" id="Tarihi" name="Tarihi" type="text" class="form-control" autocomplete="off" />
+    @Html.ValidationMessageFor(model => model.Tarihi, "", new { @class = "text-danger" })
 
-    <button type="submit" class="btn btn-success">Kaydet</button>
+    <script>
+        $('#Tarihi').datetimepicker({
+            minDate: 0,
+            format: 'Y-m-d H:i',
+            step: 30
+        });
+    </script>
+</div>
+
+
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+
+    <button type="submit" class="btn btn-success mt-3">Kaydet</button>
 </form>
+

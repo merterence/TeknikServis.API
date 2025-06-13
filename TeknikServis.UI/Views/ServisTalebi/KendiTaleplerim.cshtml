@@ -29,7 +29,7 @@
         <tbody>
             @foreach (var talep in Model)
             {
-               
+
                 <tr>
                     <td>@talep.Urun.Ad</td>
                     <td>@talep.Aciklama</td>
@@ -41,7 +41,14 @@
                         <a class="btn btn-primary" asp-action="TalepDetay" asp-route-id="@talep.Id">Detay</a>
                     </td>
                     <td>
-                        <a class="btn btn-success" asp-action="Create" asp-controller="Randevu" asp-route-id="@talep.Id">Randevu</a>
+                        @if (talep.Randevular.Select(r => r.RandevuDurumu != TeknikServis.DTO.RandevuDurumu.ONAYLANDI || r.RandevuDurumu != TeknikServis.DTO.RandevuDurumu.PLANLANDI).ToList().Count == 0)
+                        {
+                            <a class="btn btn-success" asp-action="Create" asp-controller="Randevu" asp-route-id="@talep.Id" asp-route-musteriAdi="@talep.Kullanici.AdSoyad" asp-route-urunAdi="@talep.Urun.Ad">Randevu</a>
+                        }
+                        else
+                        {
+                            <span class="text-info">Randevusu Var</span>
+                        }
                     </td>
 
                     <td>

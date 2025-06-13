@@ -31,5 +31,7 @@ namespace TeknikServis.DTO
         public  KullaniciDto? Kullanici { get; set; }
  
         public List<string>? TalepResimleri { get; set; }
+
+        public List<RandevuDto>? Randevular { get; set; }
     }
 }
