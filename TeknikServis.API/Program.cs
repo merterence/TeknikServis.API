@@ -8,12 +8,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 
 
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowMvcApp", policy =>
     {
-        policy.WithOrigins("https://localhost:7175") // MVC projesi adresi
+        policy.WithOrigins("https://localhost:7175", "http://10.0.2.2:44365") // MVC projesi adresi
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials(); // SignalR için gerekli
@@ -46,7 +45,7 @@ if (app.Environment.IsDevelopment())
 }
 
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseRouting();
 
@@ -60,5 +59,6 @@ app.MapControllers();
 app.MapHub<NotificationHub>("/hub/notification").RequireCors("AllowMvcApp");
 
 app.Run();
+
 
 
